@@ -4,12 +4,14 @@
 import pymysql
 import tushare as ts
 import time
+import pandas as pd
+import numpy as np
 
 DBname= 'stocktushareV2'
 dailyTable = 'daily'
 dailybasicTable = 'daily_basic'
-starttime = '20190101'
-endtime = time.strftime('%Y%m%d',time.localtime(time.time()))#默认系统当前日期
+STARTTIME = '20190201'
+ENDTIME = time.strftime('%Y%m%d',time.localtime(time.time()))#默认系统当前日期
 
 stockDB = pymysql.connect("localhost","root","",DBname,charset='utf8')# 打开数据库连接
 cursorDB = stockDB.cursor() # 使用 cursor() 方法创建一个游标对象 cursor
@@ -170,9 +172,21 @@ def getStockDailyInfo(ts_codetmp,starttimetmp,endtimetmp):
     df = tspro.daily(ts_code=ts_codetmp,start_date=starttimetmp, end_date=endtimetmp)
     i=0
     for dailyinfo in df.values:
-        sql = 'insert into  '+dailyTable + ' values ( '+'\''+dailyinfo[0]+'\',\''+dailyinfo[1]+'\','+ str(dailyinfo[2]) +','
-        sql = sql + str(dailyinfo[3]) +','+ str(dailyinfo[4]) +','+ str(dailyinfo[5]) +','+ str(dailyinfo[6]) +','+ str(dailyinfo[7]) +','+ str(dailyinfo[8]) +','
-        sql = sql + str(dailyinfo[9]) +','+ str(dailyinfo[10]) +')'
+        ts_code = str('0' if np.isnan(dailyinfo[0]) else dailyinfo[0])
+        trade_date = str('0' if np.isnan(dailyinfo[1]) else dailyinfo[1])
+        open1 = str('0' if np.isnan(dailyinfo[2]) else dailyinfo[2])
+        high = str('0' if np.isnan(dailyinfo[3]) else dailyinfo[3])
+        low = str('0' if np.isnan(dailyinfo[4]) else dailyinfo[4])
+        close = str('0' if np.isnan(dailyinfo[5]) else dailyinfo[5])
+        pre_close = str('0' if np.isnan(dailyinfo[6]) else dailyinfo[6])
+        change = str('0' if np.isnan(dailyinfo[7]) else dailyinfo[7])
+        pct_chg = str('0' if np.isnan(dailyinfo[8]) else dailyinfo[8])
+        vol = str('0' if np.isnan(dailyinfo[9]) else dailyinfo[9])
+        amount= str('0' if np.isnan(dailyinfo[10]) else dailyinfo[10])
+    
+        sql = 'insert into  '+dailyTable + ' values ( '+'\''+ts_code+'\',\''+trade_date+'\','+ open1 +','
+        sql = sql + high +','+ low +','+ close +','+ pre_close +','+ change +','+ pct_chg +','
+        sql = sql + vol +','+ amount +')'
         try:
             cursorDB.execute(sql)
             stockDB.commit()
@@ -190,16 +204,16 @@ def getAllstockDailyInfo(endtimetmp):
         ts = tscode[0]
         maxdateinDB = getMaxdateFromTable(dailyTable,ts)
         
-        getStockDailyInfo(tscode[0],maxdateinDB,endtime) 
+        getStockDailyInfo(tscode[0],maxdateinDB,ENDTIME) 
 
 ##返回指定股票当天每日指标信息    
 def getStockDailyBasicInfo(ts_codetmp):
    
         
-    tradedate =endtimetmp
+    tradedate =ENDTIME
        
     df = tspro.daily_basic(ts_code=ts_codetmp,trade_date=tradedate)
-    if len(df)==0 : continue
+    
     dailyinfo=df.values[0]
     return dailyinfo
     # sql = 'insert into  '+dailybasicTable + ' values ( '+'\''+dailyinfo[0]+'\',\''+dailyinfo[1]+'\','+ str(dailyinfo[2]) +','
@@ -220,27 +234,50 @@ def getAllstockDailyBasicInfo(endtimetmp):
     i=0
     
     maxdateinDB = getMaxdateFromTable(dailybasicTable,'000001.SZ')
-       
+    
     if maxdateinDB > endtimetmp : return#股票已有信息则退出
-    for tradedate in range(int(maxdateinDB),int(endtimetmp)) :
+    for tradedate in range(int(maxdateinDB),int(endtimetmp)+1) :
        
         df = tspro.daily_basic(ts_code='',trade_date=tradedate)
         if len(df)==0 : continue
-        dailyinfo=df.values[0]
-        i= i+1
-        sql = 'insert into  '+dailybasicTable + ' values ( '+'\''+dailyinfo[0]+'\',\''+dailyinfo[1]+'\','+ str(dailyinfo[2]) +','
-        sql = sql + str(dailyinfo[3]) +','+ str(dailyinfo[4]) +','+ str(dailyinfo[5]) +','+ str(dailyinfo[6]) +','+ str(dailyinfo[7]) +','+ str(dailyinfo[8]) +','
-        sql = sql + str(dailyinfo[9]) +','+ str(dailyinfo[10]) +','+ str(dailyinfo[11]) +','+ str(dailyinfo[12]) +','+ str(dailyinfo[13])  +','+ str(dailyinfo[14]) +','+ str(dailyinfo[15])+')'
-        try:
-            cursorDB.execute(sql)
-            stockDB.commit()
+        df = df.values
+        for dailyinfo in df:
+            replaceArrayNone(dailyinfo)
+            i= i+1
+            ts_code = dailyinfo[0]
+            trade_date = dailyinfo[1]
+            close = str('0' if np.isnan(dailyinfo[2]) else dailyinfo[2])
+            turnover_rate =str('0' if np.isnan(dailyinfo[3]) else dailyinfo[3]) 
+            turnover_rate_f =str('0' if np.isnan(dailyinfo[4]) else dailyinfo[4]) 
+            volume_ratio = str('0' if np.isnan(dailyinfo[5]) else dailyinfo[5])
+            pe = str('0' if np.isnan(dailyinfo[6]) else dailyinfo[6])
+            pe_ttm =str('0' if np.isnan(dailyinfo[7]) else dailyinfo[7])
+            pb = str('0' if np.isnan(dailyinfo[8]) else dailyinfo[8])
+            ps = str('0' if np.isnan(dailyinfo[9]) else dailyinfo[9])
+            ps_ttm =str('0' if np.isnan(dailyinfo[10]) else dailyinfo[10])
+            total_share = str('0' if np.isnan(dailyinfo[11]) else dailyinfo[11])
+            float_share = str('0' if np.isnan(dailyinfo[12]) else dailyinfo[12])
+            free_share =str('0' if np.isnan(dailyinfo[13]) else dailyinfo[13])
+            total_mv =str('0' if np.isnan(dailyinfo[14]) else dailyinfo[14])
+            circ_mv =str('0' if np.isnan(dailyinfo[15]) else dailyinfo[15])
+            
+            sql = 'insert into  '+dailybasicTable + ' values ( '+'\''+ts_code+'\',\''+trade_date+'\','+ close +','
+            sql = sql +turnover_rate +','+ turnover_rate_f+','+ volume_ratio +','+  pe+','+ pe_ttm +','+ pb +','
+            sql = sql + ps +','+ ps_ttm +','+ total_share +','+ float_share +','+ free_share  +','+ total_mv +','+ circ_mv+')'
+            try:
+                cursorDB.execute(sql)
+                stockDB.commit()
          
-        except :
-            stockDB.rollback()
-            print('插入股票%s%s当天数据失败'%(dailyinfo[0],dailyinfo[1]))
+            except :
+                stockDB.rollback()
+                print('插入股票%s%s当天数据失败'%(dailyinfo[0],dailyinfo[1]))
     
-    print('插入股票%s交易记录共%s条'%(ts_codetmp,i))
-        
+    print('插入股票交易记录共%s条'%(i))
+
+#替换数组中存在的None
+def replaceArrayNone(reArray):
+    reArray[reArray == None] = 0
+    return reArray        
 
  #获取表中最大日期,否则返回默认starttime
 def getMaxdateFromTable(tablename,tscode):
@@ -249,14 +286,14 @@ def getMaxdateFromTable(tablename,tscode):
          cursorDB.execute(sql)
          result = cursorDB.fetchone()
          if result[0] == None :
-             return starttime
+             return STARTTIME
         #  elif result[0]<starttime:
         #      return starttime
          else:
              a =int(result[0])+1#最大日期加1
-             return a
+             return str(a)
      except :
-         return starttime
+         return STARTTIME
 
 #删除指定表数据信息
 def deleteTableInfor(tablename):
@@ -278,13 +315,14 @@ def dropTable(tablename):
         stockDB.rollback()
 
 
+getAllstockDailyBasicInfo(ENDTIME)  
+
 # insertStockbasicToDB(tspro)#获取上市股票列表，并插入数据库
 
 # insertCompanyInfoToDB(tspro)
 
-# createStockDailyBasicTable()
 
-# getStockDailyInfo('000001.SZ','20170101','20190226')
+
 
 stockDB.close()
 
