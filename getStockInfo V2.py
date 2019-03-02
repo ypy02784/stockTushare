@@ -169,11 +169,11 @@ def findRepeatTable(tablename):
 
 #获取指定股票每日交易信息    
 def getStockDailyInfo(ts_codetmp,starttimetmp,endtimetmp):
-    df = tspro.daily(ts_code=ts_codetmp,start_date=starttimetmp, end_date=endtimetmp)
+    df = tspro.daily(ts_code=ts_codetmp,start_date=starttimetmp, end_date=endtimetmp)#daily函数还可以取某天的全部历史，插入时需要判断参数为daily(trade_date='20180810')
     i=0
     for dailyinfo in df.values:
-        ts_code = str('0' if np.isnan(dailyinfo[0]) else dailyinfo[0])
-        trade_date = str('0' if np.isnan(dailyinfo[1]) else dailyinfo[1])
+        ts_code = dailyinfo[0]
+        trade_date =dailyinfo[1]
         open1 = str('0' if np.isnan(dailyinfo[2]) else dailyinfo[2])
         high = str('0' if np.isnan(dailyinfo[3]) else dailyinfo[3])
         low = str('0' if np.isnan(dailyinfo[4]) else dailyinfo[4])
@@ -321,7 +321,8 @@ getAllstockDailyBasicInfo(ENDTIME)
 
 # insertCompanyInfoToDB(tspro)
 
-
+getAllstockDailyInfo(ENDTIME)
+getAllstockDailyBasicInfo(ENDTIME)
 
 
 stockDB.close()
