@@ -9,7 +9,7 @@ import numpy as np
 from sqlalchemy import create_engine
 import sys
 
-DBname = 'stocktushareV2'
+DBname = 'stocktushare'
 DAILYTABLE = 'daily'
 DAILYBASICTABLE = 'daily_basic'
 STOCKBAISCTABLE = 'stock_basic'
@@ -17,9 +17,15 @@ COMPANYTABLE = 'stock_company'
 STARTTIME = '20190201'
 NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
 
-stockDB = pymysql.connect(
-    "localhost", "root", "", DBname, charset='utf8')  # 打开数据库连接  使用mysql连接数库
-cursorDB = stockDB.cursor()  # 使用 cursor() 方法创建一个游标对象 cursor
+try:
+    stockDB = pymysql.connect(
+        "localhost", "root", "", DBname,
+        charset='utf8')  # 打开数据库连接  使用mysql连接数库
+    cursorDB = stockDB.cursor()  # 使用 cursor() 方法创建一个游标对象 cursor
+except:
+    print('请检查数据库是否正常,程序将终止！！！')
+    sys.exit()
+
 cn = create_engine('mysql+pymysql://root:@localhost:3306/' + DBname +
                    '?charset=utf8')  #创建数据引擎方便批量插入数据
 
@@ -28,7 +34,7 @@ try:
         'b5495988a3294331dda2b5c4a9bb7b9766f179863118c097e5296f60'
     )  #tushare pro 需要在初始化时加上token代码，网址https://tushare.pro
 except:
-    print('请检查计算机是否正常联网，无法连接tushare平台,程序将终止')
+    print('请检查计算机是否正常联网，无法连接tushare平台,程序将终止！！！')
     sys.exit()
 
 
@@ -135,9 +141,15 @@ def getMaxdateFromTable(tablename):
         return STARTTIME
 
 
-updateStockbasicToDB()
-updateCompanyInfoToDB()
-getAllStockDailyInfo()
-getAllStockDailyBasicInfo()
+#更新所有股票数据
+def updateStockInfo():
+
+    updateStockbasicToDB()  #股票基本信息
+    updateCompanyInfoToDB()  #公司信息
+    getAllStockDailyInfo()  #日交易信息
+    getAllStockDailyBasicInfo()  #日交易指标
+
+
+updateStockInfo()
 
 stockDB.close()
