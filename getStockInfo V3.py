@@ -124,10 +124,10 @@ def getMaxdateFromTable(tablename):
      except :
          return STARTTIME
 
-# updateStockbasicToDB()
-# updateCompanyInfoToDB()
+updateStockbasicToDB()
+updateCompanyInfoToDB()
 getAllStockDailyInfo()
-# getAllStockDailyBasicInfo()
+getAllStockDailyBasicInfo()
 
 stockDB.close()
 

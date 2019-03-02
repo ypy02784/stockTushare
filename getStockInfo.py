@@ -1,3 +1,4 @@
+#最原始版本，每个股票都创建一个数据表，太消耗资源
 #coding=utf-8
 import pymysql
 import tushare as ts
