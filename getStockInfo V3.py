@@ -45,7 +45,7 @@ def updateStockbasicToDB():
     if len(stock_basic.values) == 0: return  #无数据则推出函数
     try:
         if not (deleteTableInfo(STOCKBAISCTABLE)):
-            return  #删除表中数据失败则推出函数，避免重复数据
+            return  #删除表中数据失败则退出函数，避免重复数据
         stock_basic.to_sql(
             STOCKBAISCTABLE, cn, index=False, if_exists='append')
         print('更新股票基本信息表成功，目前上市股票有%s个股' % (len(stock_basic.values)))
@@ -97,7 +97,7 @@ def getAllStockDailyInfo():
     if starttime >= NOWTIME:
         print('当前信息已是最新')
         return
-    for tradedate in range(int(starttime) + 1, int(NOWTIME)):
+    for tradedate in range(int(starttime) + 1, int(NOWTIME)+1):
         getOneDayStockDailyInfo(tradedate)
 
 
@@ -119,7 +119,7 @@ def getAllStockDailyBasicInfo():
     if starttime >= NOWTIME:
         print('当前信息已是最新')
         return
-    for tradedate in range(int(starttime) + 1, int(NOWTIME)):
+    for tradedate in range(int(starttime) + 1, int(NOWTIME)+1):
         getOneDayStockDailyBasicInfo(tradedate)
 
 
@@ -143,8 +143,8 @@ def getMaxdateFromTable(tablename):
 #更新所有股票数据
 def updateStockInfo():
 
-    updateStockbasicToDB()  #股票基本信息
-    updateCompanyInfoToDB()  #公司信息
+    # updateStockbasicToDB()  #股票基本信息
+    # updateCompanyInfoToDB()  #公司信息
     getAllStockDailyInfo()  #日交易信息
     getAllStockDailyBasicInfo()  #日交易指标
 
