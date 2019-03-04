@@ -97,10 +97,10 @@ def createTable():  #创建数据表
     sql3 = SQLstockDailyTable()
     sql4 = SQLstockDailyBasicTable()
     try:
-        cursorDB.execute(sql1)  # 
-        cursorDB.execute(sql2)  # 
-        cursorDB.execute(sql3)  # 
-        cursorDB.execute(sql4)  #
+        cursorDB.execute(sql1)  
+        cursorDB.execute(sql2)  
+        cursorDB.execute(sql3)  
+        cursorDB.execute(sql4) 
     except Exception as e:
         stockDB.rollback()  # 事务回滚
         stockDB.close()
@@ -121,10 +121,10 @@ def dropExistTable():
     sql4 = 'DROP TABLE IF EXISTS `daily`;'
     
     try:
-        cursorDB.execute(sql1)  # 
-        cursorDB.execute(sql2)  # 
-        cursorDB.execute(sql3)  # 
-        cursorDB.execute(sql4)  # 
+        cursorDB.execute(sql1)  
+        cursorDB.execute(sql2)  
+        cursorDB.execute(sql3)  
+        cursorDB.execute(sql4)  
     except Exception as e:
         stockDB.close()
         print('删除原有数据表失败，请手动删除', e)
