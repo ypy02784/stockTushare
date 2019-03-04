@@ -10,7 +10,7 @@ import numpy as np
 DBname= 'stocktushareV2'
 dailyTable = 'daily'
 dailybasicTable = 'daily_basic'
-STARTTIME = '20190201'
+STARTTIME = '20180101'
 ENDTIME = time.strftime('%Y%m%d',time.localtime(time.time()))#默认系统当前日期
 
 stockDB = pymysql.connect("localhost","root","",DBname,charset='utf8')# 打开数据库连接
@@ -314,10 +314,9 @@ def dropTable(tablename):
     except :
         stockDB.rollback()
 
+ 
 
-getAllstockDailyBasicInfo(ENDTIME)  
-
-# insertStockbasicToDB(tspro)#获取上市股票列表，并插入数据库
+insertStockbasicToDB(tspro)#获取上市股票列表，并插入数据库
 
 # insertCompanyInfoToDB(tspro)
 

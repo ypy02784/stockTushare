@@ -4,29 +4,15 @@
 import pymysql
 import tushare as ts
 import time
+import datetime
 
 from sqlalchemy import create_engine
 import sys
 
-DBname = 'stocktushare'
-DAILYTABLE = 'daily'
-DAILYBASICTABLE = 'daily_basic'
-STOCKBAISCTABLE = 'stock_basic'
-COMPANYTABLE = 'stock_company'
-STARTTIME = '20190201'
+from connectDB import DBname,DAILYTABLE,DAILYBASICTABLE,STOCKBAISCTABLE,COMPANYTABLE,stockDB,cursorDB,cn
+
+STARTTIME = '20180101'
 NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
-
-try:
-    stockDB = pymysql.connect(
-        "localhost", "root", "", DBname,
-        charset='utf8')  # 打开数据库连接  使用mysql连接数库
-    cursorDB = stockDB.cursor()  # 使用 cursor() 方法创建一个游标对象 cursor
-except:
-    print('请检查数据库是否正常,程序将终止！！！')
-    sys.exit()
-
-cn = create_engine('mysql+pymysql://root:@localhost:3306/' + DBname +
-                   '?charset=utf8')  #创建数据引擎方便批量插入数据
 
 try:
     tspro = ts.pro_api(
@@ -79,6 +65,14 @@ def updateCompanyInfoToDB():
     except:
         print('更新上市公司信息表失败，请检查数据库后重新更新')
 
+def strTimeToTime(strTime=''):#将20190101格式的字符串转换成日期%Y-%m-%d返回,默认返回当前日期
+    nowtmp = time.localtime(time.time())
+    nowtmp =datetime.date(nowtmp.tm_year,nowtmp.tm_mon,nowtmp.tm_mday)
+    if strTime=='':  return nowtmp
+    tmp = time.strptime(strTime,'%Y%m%d')
+    tmp = datetime.date(tmp.tm_year,tmp.tm_mon,tmp.tm_mday)
+    return tmp
+
 
 # TODO: 获取所有股票的指定日期交易信息
 def getOneDayStockDailyInfo(endtimetmp):
@@ -91,21 +85,26 @@ def getOneDayStockDailyInfo(endtimetmp):
         print('插入' + str(endtimetmp) + '股票交易信息失败,请检查数据库是否开启！')
         return
 
-
 #TODO:更新所有股票交易信息,默认获取到当前日期，也可指定更新到某天
 def getAllStockDailyInfo():
     starttime = getMaxdateFromTable(DAILYTABLE)
     if starttime >= NOWTIME:
         print('当前信息已是最新')
         return
-    for tradedate in range(int(starttime) + 1, int(NOWTIME)+1):
-        getOneDayStockDailyInfo(tradedate)
+    #需要将20190101格式字符串转换为时间格式，便于循环
+    begin = strTimeToTime(starttime)#转换成日期格式%Y-%m-%d
+    end = strTimeToTime(NOWTIME)
+    for i in range(1,(end - begin).days+1):#按日期循环
+        day = begin + datetime.timedelta(days=i)
+        day = str(day).replace('-','')
+        getOneDayStockDailyInfo(day)
+   
 
 
 #TODO:获取所有股票的指定日期每日指标信息
 def getOneDayStockDailyBasicInfo(endtimetmp):
     df = tspro.daily_basic(ts_code='', trade_date=endtimetmp)
-    if len(df.values) == 0: return  #无数据则推出函数
+    if len(df.values) == 0: return #无数据则推出函数
     try:
         df.to_sql(DAILYBASICTABLE, cn, index=False, if_exists='append')
         print('插入' + str(endtimetmp) + '每日指标信息共%s条' % (len(df.values)))
@@ -120,8 +119,13 @@ def getAllStockDailyBasicInfo():
     if starttime >= NOWTIME:
         print('当前信息已是最新')
         return
-    for tradedate in range(int(starttime) + 1, int(NOWTIME)+1):
-        getOneDayStockDailyBasicInfo(tradedate)
+
+    begin = strTimeToTime(starttime)#转换成日期格式%Y-%m-%d
+    end = strTimeToTime(NOWTIME)
+    for i in range(1,(end - begin).days+1):#按日期循环
+        day = begin + datetime.timedelta(days=i)
+        day = str(day).replace('-','')
+        getOneDayStockDailyBasicInfo(day)
 
 
 #获取表中最大日期,否则返回默认starttime
@@ -152,4 +156,3 @@ def updateStockInfo():
 
 updateStockInfo()
 
-stockDB.close()

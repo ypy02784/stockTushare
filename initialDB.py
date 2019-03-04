@@ -3,7 +3,11 @@
 
 import pymysql
 import sys
-from connectDB import DBname,DAILYBASICTABLE,DAILYTABLE,mysqlCon,mysqlcur,STOCKBAISCTABLE,COMPANYTABLE,stockDB,cursorDB
+
+
+mysqlDB = 'information_schema'
+DBname = 'stocktushare'
+
 
 #返回stockdaily表的sql语句
 def SQLstockDailyTable():
@@ -90,17 +94,17 @@ def SQLstockCompany():
 
 def createTable():  #创建数据表
     stockDB = pymysql.connect(
-        "localhost", "root", "", DBname, charset='utf8')  # 打开数据库连接
+        "localhost", "root", "", DBname,charset='utf8')  # 打开数据库连接
     cursorDB = stockDB.cursor()  # 使用 cursor() 方法创建一个游标对象 cursor
     sql1 = SQLstockBasicTable()
     sql2 = SQLstockCompany()
     sql3 = SQLstockDailyTable()
     sql4 = SQLstockDailyBasicTable()
     try:
-        cursorDB.execute(sql1)  
-        cursorDB.execute(sql2)  
-        cursorDB.execute(sql3)  
-        cursorDB.execute(sql4) 
+        cursorDB.execute(sql1)
+        cursorDB.execute(sql2)
+        cursorDB.execute(sql3)
+        cursorDB.execute(sql4)
     except Exception as e:
         stockDB.rollback()  # 事务回滚
         stockDB.close()
@@ -109,6 +113,7 @@ def createTable():  #创建数据表
         stockDB.commit()  # 事务提交
         print('数据表创建成功')
         stockDB.close()
+
 
 #如果原有表则删除表
 def dropExistTable():
@@ -119,12 +124,12 @@ def dropExistTable():
     sql2 = 'DROP TABLE IF EXISTS `stock_basic`;'
     sql3 = 'DROP TABLE IF EXISTS `daily_basic`;'
     sql4 = 'DROP TABLE IF EXISTS `daily`;'
-    
+
     try:
-        cursorDB.execute(sql1)  
-        cursorDB.execute(sql2)  
-        cursorDB.execute(sql3)  
-        cursorDB.execute(sql4)  
+        cursorDB.execute(sql1)
+        cursorDB.execute(sql2)
+        cursorDB.execute(sql3)
+        cursorDB.execute(sql4)
     except Exception as e:
         stockDB.close()
         print('删除原有数据表失败，请手动删除', e)
@@ -132,23 +137,35 @@ def dropExistTable():
         stockDB.commit()  # 事务提交
         stockDB.close()
         # print('数据表删除成功', cursorDB.rowcount)
-   
+
+
 def creatStockTushareDB():
-    sql = 'CREATE DATABASE IF NOT EXISTS ' + DBname + ' default charset utf8 COLLATE utf8_general_ci'
     try:
-        print('正在创建数据库stocktushare......') 
+        mysqlCon = pymysql.connect(
+        "localhost", "root", "", mysqlDB,
+        charset='utf8')  # 打开mysql数据库连接，用于创建新的数据库
+        mysqlcur = mysqlCon.cursor()
+    except:
+        print('数据库连接失败，请检查数据库是否开启或是否存在mysql数据库，请使用5.0版本以上的mysql')
+        sys.exit()
+    sql = 'CREATE DATABASE IF NOT EXISTS '+DBname+' default charset utf8 COLLATE utf8_general_ci'
+    try:
+        print('正在创建数据库stocktushare......')
         mysqlcur.execute(sql)
         mysqlCon.commit()
-        print('创建数据库stocktushare成功') 
+        print('创建数据库stocktushare成功')
         return True
     except:
         print('创建数据库stocktushare失败')  #出错的话就返回false
         return False
+    finally:
+        mysqlCon.close()
+
 
 #初始化数据库，
 def initialDB():
-    if creatStockTushareDB():#创建成功或者数据库已存在的情况下执行后面数据
-        dropExistTable()  #创建数据库失败，说明已经已经存在，删除可能存在的数据表
+    if creatStockTushareDB():  #创建成功或者数据库已存在的情况下执行后面数据
+        dropExistTable()  #删除可能存在的数据表
         createTable()  #创建数据表
         print('数据库初始化完成！！！')
     else:
@@ -156,6 +173,5 @@ def initialDB():
 
 
 #只需调用initialDB函数即可完成数据库初始化
-initialDB()
+# initialDB()
 
-mysqlCon.close()
