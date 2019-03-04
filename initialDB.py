@@ -3,23 +3,7 @@
 
 import pymysql
 import sys
-
-mysqlDB = 'mysql'
-DBname = 'stocktushare'
-DAILYTABLE = 'daily'
-DAILYBASICTABLE = 'daily_basic'
-STOCKBAISCTABLE = 'stock_basic'
-COMPANYTABLE = 'stock_company'
-
-try:
-    mysqlCon = pymysql.connect(
-        "localhost", "root", "", 'mysql',
-        charset='utf8')  # 打开mysql数据库连接，用于创建新的数据库
-    mysqlcur = mysqlCon.cursor()
-except:
-    print('数据库连接失败，请检查数据是否开启或是否存在mysql数据库')
-    sys.exit()
-
+from connectDB import DBname,DAILYBASICTABLE,DAILYTABLE,mysqlCon,mysqlcur,STOCKBAISCTABLE,COMPANYTABLE,stockDB,cursorDB
 
 #返回stockdaily表的sql语句
 def SQLstockDailyTable():

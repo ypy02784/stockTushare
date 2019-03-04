@@ -4,8 +4,7 @@
 import pymysql
 import tushare as ts
 import time
-import pandas as pd
-import numpy as np
+
 from sqlalchemy import create_engine
 import sys
 
@@ -62,7 +61,7 @@ def deleteTableInfo(tablename):
         stockDB.commit()
         return True
     except:
-        print('删除stock_basic表数据失败')  #出错的话就返回false
+        print('删除'+tablename+'表数据失败')  #出错的话就返回false
         return False
 
 
