@@ -20,11 +20,9 @@ except:
     print('数据库连接失败，请检查数据库是否开启或是否安装了mysql数据库，请使用5.0版本以上的mysql')
     sys.exit()
 
-sqltmp = 'SELECT * FROM information_schema.SCHEMATA where SCHEMA_NAME=\'' + DBname + '\''
-mysqlcur.execute(sqltmp)
-tmp = mysqlcur.fetchone()
 
-if tmp == None:  #数据库不存在
+
+if isDBnotExist():  #数据库不存在
     a = str.upper(input('数据库不存在，是否执行数据库初始化操作？（Y/N）：'))  #默认只能输入Y或者N
     while a != 'Y' and a != 'N':
         a = str.upper(input('数据库不存在，是否执行数据库初始化操作？（Y/N）：'))  #默认只能输入Y或者N
@@ -35,6 +33,18 @@ if tmp == None:  #数据库不存在
             sys.exit()  #否则退出
     except:
         sys.exit()  #否则退出
+
+def isDBnotExist():#判断数据库是否存在
+    sqltmp = 'SELECT * FROM information_schema.SCHEMATA where SCHEMA_NAME=\'' + DBname + '\''
+    try:
+        count = mysqlcur.execute(sqltmp)
+    except:
+        print('数据库连接失败')
+        return True
+
+    if count==1:return False
+    else: return True
+    
 
 try:
     # 打开数据库连接  使用mysql连接数库

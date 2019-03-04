@@ -147,7 +147,8 @@ def creatStockTushareDB():
         mysqlcur = mysqlCon.cursor()
     except:
         print('数据库连接失败，请检查数据库是否开启或是否存在mysql数据库，请使用5.0版本以上的mysql')
-        sys.exit()
+        sys.exit()  
+
     sql = 'CREATE DATABASE IF NOT EXISTS '+DBname+' default charset utf8 COLLATE utf8_general_ci'
     try:
         print('正在创建数据库stocktushare......')
@@ -160,6 +161,9 @@ def creatStockTushareDB():
         return False
     finally:
         mysqlCon.close()
+    
+
+    
 
 
 #初始化数据库，
