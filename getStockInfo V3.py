@@ -57,7 +57,8 @@ def updateStockbasicToDB():
 def deleteTableInfo(tablename):
     sql = 'delete from ' + tablename
     try:
-        cursorDB.execute(sql)
+        count= cursorDB.execute(sql)
+        print('删除原数据表'+tablename+'%s条数据'%(count))
         stockDB.commit()
         return True
     except:
@@ -143,8 +144,8 @@ def getMaxdateFromTable(tablename):
 #更新所有股票数据
 def updateStockInfo():
 
-    # updateStockbasicToDB()  #股票基本信息
-    # updateCompanyInfoToDB()  #公司信息
+    updateStockbasicToDB()  #股票基本信息
+    updateCompanyInfoToDB()  #公司信息
     getAllStockDailyInfo()  #日交易信息
     getAllStockDailyBasicInfo()  #日交易指标
 
