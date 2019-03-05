@@ -1,1 +1,1 @@
-pyuic5 -o test.py test.ui
+pyuic5 -o mainForm.py mainForm.ui

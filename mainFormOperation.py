@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow  #TODO:由于pyqt是用C编译的，所以vscode在编译时报错，但不影响使用
+from PyQt5.QtWidgets import QApplication, QMainWindow,QLabel,QDialog,QPushButton  #TODO:由于pyqt是用C编译的，所以vscode在编译时报错，但不影响使用
 from PyQt5.QtCore import Qt, QDate
 from PyQt5 import QtSql
 from PyQt5.QtSql import QSqlDatabase, QSqlTableModel, QSqlQueryModel
@@ -20,7 +20,10 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.pushStockBasicButton.clicked.connect(
             self.pushStockBasicButtonClicked)
         self.pushCompanyButton.clicked.connect(self.pushCompanyButtonClicked)
-        self.calendarWidget.setSelectedDate(QDate(2019, 3, 1))
+        self.pushToplistButton.clicked.connect(self.pushTopListButtonClicked)
+        self.pushTopInstButton.clicked.connect(self.pushTopInstButtonClicked)
+        self.pushBlockTradeButton.clicked.connect(self.pushBlockTradeButtonClicked)
+        self.calendarWidget.selectionChanged.connect(self.calendarWidgetSelected)
         self.selectData = self.calendarWidget.selectedDate().toString(
             Qt.ISODate).replace('-', '')  #去掉时间中的‘-’,从2019-03-01转换成20190301格式
 
@@ -28,22 +31,104 @@ class MyWindow(QMainWindow, Ui_MainWindow):
     DBname = 'stocktushare'
     NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
 
+    def calendarWidgetSelected(self):
+        self.selectData = self.calendarWidget.selectedDate().toString(
+            Qt.ISODate).replace('-', '') 
+
     def pushDailyButtonClicked(self):
         model = self._setDailyModel(self._getDailyinfo(self.selectData))
-        self.tableView.setModel(model)
+        if model !=0 :self.tableView.setModel(model) 
+        else: #TODO:弹出对话框说明无数据    
+            dialog= QDialog()  
+            label =QLabel('没有'+self.selectData+'交易数据',dialog)
+            label.move(50,50)
+            dialog.resize(400,200)
+            dialog.setWindowTitle("提示")
+            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+        
 
     def pushDailyBasicButtonClicked(self):
         model = self._setDailyBasickModel(
             self._getDailyBasicInfo(self.selectData))
-        self.tableView.setModel(model)
-
+        if model !=0 :self.tableView.setModel(model)
+        else: #TODO:弹出对话框说明无数据    
+            dialog= QDialog()  
+            label =QLabel('没有'+self.selectData+'交易指标数据',dialog)
+            label.move(50,50)
+            dialog.resize(400,200)
+            dialog.setWindowTitle("提示")
+            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+      
     def pushStockBasicButtonClicked(self):
         model = self._setStockBasickModel(self._getStockBasicInfo())
-        self.tableView.setModel(model)
+        if model !=0 :self.tableView.setModel(model)
+        else: #TODO:弹出对话框说明无数据    
+            dialog= QDialog()  
+            label =QLabel('没有股票基本信息数据',dialog)
+            label.move(50,50)
+            dialog.setWindowTitle("提示")
+            dialog.resize(400,200)
+            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
 
     def pushCompanyButtonClicked(self):
         model = self._setCompanyModel(self._getCompanyInfo())
-        self.tableView.setModel(model)
+        if model !=0 :self.tableView.setModel(model)
+        else: #TODO:弹出对话框说明无数据    
+            dialog= QDialog()  
+            label =QLabel('没有公司基本信息数据',dialog)
+            label.move(50,50)
+            dialog.setWindowTitle("提示")
+            dialog.resize(400,200)
+            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    def pushTopListButtonClicked(self):
+        model = self._setToplistModel(self._getTopListInfo(self.selectData))
+        if model !=0 :self.tableView.setModel(model)
+        else: #TODO:弹出对话框说明无数据    
+            dialog= QDialog()  
+            label =QLabel('没有'+self.selectData+'龙虎榜数据数据',dialog)
+            label.move(50,50)
+            dialog.resize(400,200)
+            dialog.setWindowTitle("提示")
+            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    def pushTopInstButtonClicked(self):
+        model = self._setTopInstModel(self._getTopInstInfo(self.selectData))
+        if model !=0 :self.tableView.setModel(model)
+        else: #TODO:弹出对话框说明无数据    
+            dialog= QDialog()  
+            label =QLabel('没有'+self.selectData+'龙虎榜机构交易数据数据',dialog)
+            label.move(50,50)
+            dialog.resize(400,200)
+            dialog.setWindowTitle("提示")
+            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    
+    def pushBlockTradeButtonClicked(self):
+        model = self._setBlockTradeModel(self._getBlockTradeInfo(self.selectData))
+        if model !=0 :self.tableView.setModel(model)
+        else: #TODO:弹出对话框说明无数据    
+            dialog= QDialog()  
+            label =QLabel('没有'+self.selectData+'大宗交易数据数据',dialog)
+            label.move(50,50)
+            dialog.resize(400,200)
+            dialog.setWindowTitle("提示")
+            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
 
     #设置股票交易信息model,参数为数据库查找返回数据集
     def _setDailyModel(self, df):
@@ -186,6 +271,100 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
         return model
 
+    #设置龙虎榜信息model,参数为数据库查找返回数据集
+    def _setToplistModel(self, df):
+        """
+        股票交易信息Model
+        函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
+        """
+
+        row = len(df)
+        if row == 0: return 0
+        vol = len(df[0])
+
+        model = QtGui.QStandardItemModel()
+        model.setRowCount(row)
+        model.setColumnCount(vol)
+        model.setHorizontalHeaderItem(0, QtGui.QStandardItem('交易日期'))
+        model.setHorizontalHeaderItem(1, QtGui.QStandardItem('股票代码'))
+        model.setHorizontalHeaderItem(2, QtGui.QStandardItem('名称'))
+        model.setHorizontalHeaderItem(3, QtGui.QStandardItem('收盘价'))
+        model.setHorizontalHeaderItem(4, QtGui.QStandardItem('涨跌幅'))
+        model.setHorizontalHeaderItem(5, QtGui.QStandardItem('换手率'))
+        model.setHorizontalHeaderItem(6, QtGui.QStandardItem('总成交额'))
+        model.setHorizontalHeaderItem(7, QtGui.QStandardItem('龙虎榜卖出额'))
+        model.setHorizontalHeaderItem(8, QtGui.QStandardItem('龙虎榜买入额'))
+        model.setHorizontalHeaderItem(9, QtGui.QStandardItem('龙虎榜成交额'))
+        model.setHorizontalHeaderItem(10, QtGui.QStandardItem('龙虎榜净买入额'))
+        model.setHorizontalHeaderItem(11, QtGui.QStandardItem('龙虎榜净买额占比'))
+        model.setHorizontalHeaderItem(12, QtGui.QStandardItem('龙虎榜成交额占比'))
+        model.setHorizontalHeaderItem(13, QtGui.QStandardItem('当日流通市值'))
+        model.setHorizontalHeaderItem(14, QtGui.QStandardItem('上榜理由'))
+
+        for i in range(row):
+            for j in range(vol):
+                tmp_data = df[i][j]
+                model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
+        return model
+
+    #设置龙虎榜机构交易信息model,参数为数据库查找返回数据集
+    def _setTopInstModel(self, df):
+        """
+        股票交易信息Model
+        函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
+        """
+
+        row = len(df)
+        if row == 0: return 0
+        vol = len(df[0])
+
+        model = QtGui.QStandardItemModel()
+        model.setRowCount(row)
+        model.setColumnCount(vol)
+        model.setHorizontalHeaderItem(0, QtGui.QStandardItem('交易日期'))
+        model.setHorizontalHeaderItem(1, QtGui.QStandardItem('股票代码'))
+        model.setHorizontalHeaderItem(2, QtGui.QStandardItem('营业部名称'))
+        model.setHorizontalHeaderItem(3, QtGui.QStandardItem('买入额（万）'))
+        model.setHorizontalHeaderItem(4, QtGui.QStandardItem('买入占总成交比例'))
+        model.setHorizontalHeaderItem(5, QtGui.QStandardItem('卖出额（万）'))
+        model.setHorizontalHeaderItem(6, QtGui.QStandardItem('卖出占总成交比例'))
+        model.setHorizontalHeaderItem(7, QtGui.QStandardItem('净成交额（万）'))
+        
+        for i in range(row):
+            for j in range(vol):
+                tmp_data = df[i][j]
+                model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
+        return model
+    #设置大宗交易信息model,参数为数据库查找返回数据集
+    def _setBlockTradeModel(self, df):
+        """
+        股票交易信息Model
+        函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
+        """
+
+        row = len(df)
+        if row == 0: return 0
+        vol = len(df[0])
+
+        model = QtGui.QStandardItemModel()
+        model.setRowCount(row)
+        model.setColumnCount(vol)
+        model.setHorizontalHeaderItem(0, QtGui.QStandardItem('股票代码'))
+        model.setHorizontalHeaderItem(1, QtGui.QStandardItem('交易日期'))
+        model.setHorizontalHeaderItem(2, QtGui.QStandardItem('成交价'))
+        model.setHorizontalHeaderItem(3, QtGui.QStandardItem('成交量（万股）'))
+        model.setHorizontalHeaderItem(4, QtGui.QStandardItem('成交金额'))
+        model.setHorizontalHeaderItem(5, QtGui.QStandardItem('买方营业部'))
+        model.setHorizontalHeaderItem(6, QtGui.QStandardItem('卖方营业部'))
+      
+        
+        for i in range(row):
+            for j in range(vol):
+                tmp_data = df[i][j]
+                model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
+        return model
+
+
     def _getDailyinfo(self, temDay=NOWTIME):
         sql = 'select * from daily where trade_date = ' + temDay + ' GROUP BY ts_code  '
         cursorDB.execute(sql)
@@ -213,7 +392,27 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         df = cursorDB.fetchall()
         stockDB.commit()
         return df
+    
+    def _getTopListInfo(self,temDay=NOWTIME):
+        sql = 'select * from top_list where trade_date = ' + temDay + ' GROUP BY ts_code '
+        cursorDB.execute(sql)
+        df = cursorDB.fetchall()
+        stockDB.commit()
+        return df
+    
+    def _getTopInstInfo(self,temDay=NOWTIME):
+        sql = 'select * from top_inst where trade_date = ' + temDay + ' GROUP BY ts_code '
+        cursorDB.execute(sql)
+        df = cursorDB.fetchall()
+        stockDB.commit()
+        return df
 
+    def _getBlockTradeInfo(self,temDay=NOWTIME):
+        sql = 'select * from block_trade where trade_date = ' + temDay + ' GROUP BY ts_code '
+        cursorDB.execute(sql)
+        df = cursorDB.fetchall()
+        stockDB.commit()
+        return df
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

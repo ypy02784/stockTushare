@@ -226,6 +226,8 @@ def updateStockInfo():
     getAllTopInstInfo()
     getAllBlockTradeInfo()
 
-
+getAllTopListInfo()
+getAllTopInstInfo()
+getAllBlockTradeInfo()
 # updateStockInfo()
 
