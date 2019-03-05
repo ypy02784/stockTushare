@@ -10,7 +10,7 @@ DBname = 'stocktushare'
 
 def _createTable():
     if _executeTableSQL('table_info'):  #首先创建table_info表，sql中带数据
-        #自动创建其余表
+        #从table_info中读取数据，自动创建其余表
         try:
             stockCon = pymysql.connect(
                 "localhost", "root", "", DBname, charset='utf8')
