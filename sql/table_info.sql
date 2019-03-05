@@ -11,7 +11,7 @@
  Target Server Version : 100136
  File Encoding         : 65001
 
- Date: 05/03/2019 09:30:22
+ Date: 05/03/2019 10:42:33
 */
 
 SET NAMES utf8mb4;
@@ -121,8 +121,8 @@ INSERT INTO `table_info` VALUES ('stock_company', '上市公司基本信息', 'm
 INSERT INTO `table_info` VALUES ('stock_company', '上市公司基本信息', 'business_scope', 'str', '经营范围');
 INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'tablename', 'str', '数据表明');
 INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'tableremark', 'str', '数据表备注');
-INSERT INTO `table_info` VALUES ('table_info	', '数据表信息', 'column', 'str', '列名');
-INSERT INTO `table_info` VALUES ('table_info	', '数据表信息', 'type', 'str', '列类别');
-INSERT INTO `table_info` VALUES ('table_info	', '数据表信息', 'remark', 'str', '列备注');
+INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'column', 'str', '列名');
+INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'type', 'str', '列类别');
+INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'remark', 'str', '列备注');
 
 SET FOREIGN_KEY_CHECKS = 1;
