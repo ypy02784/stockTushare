@@ -7,7 +7,10 @@ from UI.mainForm import *
 
 import pymysql
 import time
+
+#程序单元导入
 from connectDB import stockDB, cursorDB, DAILYBASICTABLE, DAILYTABLE, STOCKBAISCTABLE, COMPANYTABLE
+from getStockInfoV3 import updateStockInfo,updateStockbasicToDB,updateCompanyInfoToDB,getAllBlockTradeInfo,getAllStockDailyBasicInfo,getAllStockDailyInfo,getAllTopInstInfo,getAllTopListInfo
 
 
 class MyWindow(QMainWindow, Ui_MainWindow):
@@ -23,6 +26,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.pushToplistButton.clicked.connect(self.pushTopListButtonClicked)
         self.pushTopInstButton.clicked.connect(self.pushTopInstButtonClicked)
         self.pushBlockTradeButton.clicked.connect(self.pushBlockTradeButtonClicked)
+        self.action_update_Daily_Info.triggered.connect(self.action_daily_clicked)
         self.calendarWidget.selectionChanged.connect(self.calendarWidgetSelected)
         self.selectData = self.calendarWidget.selectedDate().toString(
             Qt.ISODate).replace('-', '')  #去掉时间中的‘-’,从2019-03-01转换成20190301格式
@@ -129,6 +133,11 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
             dialog.setWindowModality(Qt.ApplicationModal)
             dialog.exec_()
+
+    def action_daily_clicked(self):
+        getAllStockDailyInfo()
+
+    
 
     #设置股票交易信息model,参数为数据库查找返回数据集
     def _setDailyModel(self, df):

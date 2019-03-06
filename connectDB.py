@@ -9,9 +9,9 @@ DAILYTABLE = 'daily'  #股票每日交易信息表名称
 DAILYBASICTABLE = 'daily_basic'  #股票每日交易信息指标表名称
 STOCKBAISCTABLE = 'stock_basic'  #股票基本信息表名称
 COMPANYTABLE = 'stock_company'  #公司基本信息表名称
-TOPLISTTABLE = 'top_list'
-TOPINSTTABLE = 'top_inst'
-BLOCKTRADETABLE = 'block_trade'
+TOPLISTTABLE = 'top_list' #龙虎榜
+TOPINSTTABLE = 'top_inst' #龙虎榜机构交易
+BLOCKTRADETABLE = 'block_trade'#大宗交易
 
 
 #需要提前检查数据库stocktushare是否存在，不存在要执行初始化，否则退出，通过登录information_schema库检查

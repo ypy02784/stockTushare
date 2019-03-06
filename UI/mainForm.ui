@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>2326</width>
-    <height>1536</height>
+    <width>827</width>
+    <height>560</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -75,28 +75,21 @@
           <item>
            <widget class="QCalendarWidget" name="calendarWidget">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
             <property name="minimumSize">
              <size>
-              <width>500</width>
-              <height>873</height>
+              <width>100</width>
+              <height>100</height>
              </size>
             </property>
             <property name="font">
              <font>
               <family>楷体_GB2312</family>
              </font>
-            </property>
-            <property name="selectedDate">
-             <date>
-              <year>2019</year>
-              <month>3</month>
-              <day>1</day>
-             </date>
             </property>
             <property name="minimumDate">
              <date>
@@ -287,8 +280,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>2326</width>
-     <height>45</height>
+     <width>827</width>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_dataupdate">
@@ -297,10 +290,13 @@
     </property>
     <addaction name="action_initialDB"/>
     <addaction name="separator"/>
-    <addaction name="action_update_Daily_Info"/>
-    <addaction name="action_update_DailyBasic_Info"/>
     <addaction name="action_update_stock_basic"/>
     <addaction name="action_update_company"/>
+    <addaction name="action_update_Daily_Info"/>
+    <addaction name="action_update_DailyBasic_Info"/>
+    <addaction name="action_top_list"/>
+    <addaction name="action_top_inst"/>
+    <addaction name="action_block_trade"/>
     <addaction name="separator"/>
     <addaction name="action_update_All"/>
    </widget>
@@ -321,6 +317,7 @@
    <addaction name="menu_dataupdate"/>
    <addaction name="menu_analysis"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="action_initialDB">
    <property name="text">
     <string>初始化数据库</string>
@@ -379,6 +376,21 @@
   <action name="action_turnover_rate">
    <property name="text">
     <string>换手率分析</string>
+   </property>
+  </action>
+  <action name="action_top_list">
+   <property name="text">
+    <string>更新龙虎榜</string>
+   </property>
+  </action>
+  <action name="action_top_inst">
+   <property name="text">
+    <string>更新龙虎榜机构交易</string>
+   </property>
+  </action>
+  <action name="action_block_trade">
+   <property name="text">
+    <string>更新大宗交易信息</string>
    </property>
   </action>
  </widget>

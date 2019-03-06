@@ -11,8 +11,8 @@ import sys
 
 import connectDB 
 
-STARTTIME = '20190101'
-NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
+_STARTTIME = '20190101'
+_NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
 
 try:
     tspro = ts.pro_api(
@@ -30,7 +30,7 @@ def updateStockbasicToDB():
     )  #默认获取上市股票基本信息，包含七个内容 ts_code，symbol,name,area,industry,market,list_date
     if len(stock_basic.values) == 0: return  #无数据则推出函数
     try:
-        if not (deleteTableInfo(connectDB.STOCKBAISCTABLE)):
+        if not (_deleteTableInfo(connectDB.STOCKBAISCTABLE)):
             return  #删除表中数据失败则退出函数，避免重复数据
         stock_basic.to_sql(
             connectDB.STOCKBAISCTABLE, connectDB.cn, index=False, if_exists='append')
@@ -40,7 +40,7 @@ def updateStockbasicToDB():
 
 
 #删除指定表中数据
-def deleteTableInfo(tablename):
+def _deleteTableInfo(tablename):
     sql = 'delete from ' + tablename
     try:
         count= connectDB.cursorDB.execute(sql)
@@ -58,14 +58,14 @@ def updateCompanyInfoToDB():
     szse = tspro.stock_company(exchange='SZSE')  #获取深证公司信息
     if len(sse.values) == 0: return  #无数据则推出函数
     try:
-        if not (deleteTableInfo(connectDB.COMPANYTABLE)): return
+        if not (_deleteTableInfo(connectDB.COMPANYTABLE)): return
         sse.to_sql(connectDB.COMPANYTABLE, connectDB.cn, index=False, if_exists='append')
         szse.to_sql(connectDB.COMPANYTABLE, connectDB.cn, index=False, if_exists='append')
         print('更新上市公司信息表成功，目前上市公司有%s家' % (len(sse.values) + len(szse.values)))
     except:
         print('更新上市公司信息表失败，请检查数据库后重新更新')
 
-def strTimeToTime(strTime=''):#将20190101格式的字符串转换成日期%Y-%m-%d返回,默认返回当前日期
+def _strTimeToTime(strTime=''):#将20190101格式的字符串转换成日期%Y-%m-%d返回,默认返回当前日期
     nowtmp = time.localtime(time.time())
     nowtmp =datetime.date(nowtmp.tm_year,nowtmp.tm_mon,nowtmp.tm_mday)
     if strTime=='':  return nowtmp
@@ -75,7 +75,7 @@ def strTimeToTime(strTime=''):#将20190101格式的字符串转换成日期%Y-%m
 
 
 # TODO: 获取所有股票的指定日期交易信息
-def getOneDayStockDailyInfo(endtimetmp):
+def _getOneDayStockDailyInfo(endtimetmp):
     df = tspro.daily(trade_date=endtimetmp)
     if len(df.values) == 0: return  #无数据则推出函数
     try:
@@ -87,20 +87,21 @@ def getOneDayStockDailyInfo(endtimetmp):
 
 #TODO:更新所有股票交易信息,默认获取到当前日期，也可指定更新到某天
 def getAllStockDailyInfo():
-    starttime = getMaxdateFromTable(connectDB.DAILYTABLE)
-    if starttime >= NOWTIME:
-        print('当前信息已是最新')
+    _STARTTIME = _getMaxdateFromTable(connectDB.DAILYTABLE)
+    if _STARTTIME >= _NOWTIME:
+        print('股票交易信息当前信息已是最新')
         return
     #需要将20190101格式字符串转换为时间格式，便于循环
-    begin = strTimeToTime(starttime)#转换成日期格式%Y-%m-%d
-    end = strTimeToTime(NOWTIME)
+    begin = _strTimeToTime(_STARTTIME)#转换成日期格式%Y-%m-%d
+    end = _strTimeToTime(_NOWTIME)
     for i in range(1,(end - begin).days+1):#按日期循环
         day = begin + datetime.timedelta(days=i)
         day = str(day).replace('-','')
-        getOneDayStockDailyInfo(day)
+        _getOneDayStockDailyInfo(day)
+        time.sleep(60/200)
 
 #TODO:获取指定日期龙虎榜信息
-def getOneDayTopListInfo(daytime):
+def _getOneDayTopListInfo(daytime):
     df = tspro.top_list(trade_date=daytime)
     if len(df.values) == 0: return  #无数据则推出函数
     try:
@@ -111,20 +112,21 @@ def getOneDayTopListInfo(daytime):
         return
     
 def getAllTopListInfo():
-    starttime = getMaxdateFromTable(connectDB.TOPLISTTABLE)
-    if starttime >= NOWTIME:
-        print('当前信息已是最新')
+    _STARTTIME = _getMaxdateFromTable(connectDB.TOPLISTTABLE)
+    if _STARTTIME >= _NOWTIME:
+        print('龙虎榜当前信息已是最新')
         return
     #需要将20190101格式字符串转换为时间格式，便于循环
-    begin = strTimeToTime(starttime)#转换成日期格式%Y-%m-%d
-    end = strTimeToTime(NOWTIME)
+    begin = _strTimeToTime(_STARTTIME)#转换成日期格式%Y-%m-%d
+    end = _strTimeToTime(_NOWTIME)
     for i in range(1,(end - begin).days+1):#按日期循环
         day = begin + datetime.timedelta(days=i)
         day = str(day).replace('-','')
-        getOneDayTopListInfo(day)
+        _getOneDayTopListInfo(day)
+        time.sleep(60/200)
   
 #TODO:获取指定日期龙虎榜机构交易明细
-def getOneDayTopInstInfo(daytime):
+def _getOneDayTopInstInfo(daytime):
     df = tspro.top_inst(trade_date=daytime)
     if len(df.values) == 0: return  #无数据则推出函数
     try:
@@ -135,20 +137,21 @@ def getOneDayTopInstInfo(daytime):
         return
     
 def getAllTopInstInfo():
-    starttime = getMaxdateFromTable(connectDB.TOPINSTTABLE)
-    if starttime >= NOWTIME:
-        print('当前信息已是最新')
+    _STARTTIME = _getMaxdateFromTable(connectDB.TOPINSTTABLE)
+    if _STARTTIME >= _NOWTIME:
+        print('龙虎榜机构交易当前信息已是最新')
         return
     #需要将20190101格式字符串转换为时间格式，便于循环
-    begin = strTimeToTime(starttime)#转换成日期格式%Y-%m-%d
-    end = strTimeToTime(NOWTIME)
+    begin = _strTimeToTime(_STARTTIME)#转换成日期格式%Y-%m-%d
+    end = _strTimeToTime(_NOWTIME)
     for i in range(1,(end - begin).days+1):#按日期循环
         day = begin + datetime.timedelta(days=i)
         day = str(day).replace('-','')
-        getOneDayTopInstInfo(day)
+        _getOneDayTopInstInfo(day)
+        time.sleep(0.5)
 
 #TODO:获取指定日期大宗交易交易明细
-def getOneDayBlockTradeInfo(daytime):
+def _getOneDayBlockTradeInfo(daytime):
     df = tspro.block_trade(trade_date=daytime)
     if len(df.values) == 0: return  #无数据则推出函数
     try:
@@ -159,20 +162,21 @@ def getOneDayBlockTradeInfo(daytime):
         return
     
 def getAllBlockTradeInfo():
-    starttime = getMaxdateFromTable(connectDB.BLOCKTRADETABLE)
-    if starttime >= NOWTIME:
-        print('当前信息已是最新')
+    _STARTTIME = _getMaxdateFromTable(connectDB.BLOCKTRADETABLE)
+    if _STARTTIME >= _NOWTIME:
+        print('大宗交易当前信息已是最新')
         return
     #需要将20190101格式字符串转换为时间格式，便于循环
-    begin = strTimeToTime(starttime)#转换成日期格式%Y-%m-%d
-    end = strTimeToTime(NOWTIME)
+    begin = _strTimeToTime(_STARTTIME)#转换成日期格式%Y-%m-%d
+    end = _strTimeToTime(_NOWTIME)
     for i in range(1,(end - begin).days+1):#按日期循环
         day = begin + datetime.timedelta(days=i)
         day = str(day).replace('-','')
-        getOneDayBlockTradeInfo(day)
+        _getOneDayBlockTradeInfo(day)
+        time.sleep(60/200)
 
 #TODO:获取所有股票的指定日期每日指标信息
-def getOneDayStockDailyBasicInfo(endtimetmp):
+def _getOneDayStockDailyBasicInfo(endtimetmp):
     df = tspro.daily_basic(ts_code='', trade_date=endtimetmp)
     if len(df.values) == 0: return #无数据则推出函数
     try:
@@ -185,34 +189,35 @@ def getOneDayStockDailyBasicInfo(endtimetmp):
 
 #TODO:更新所有股票每日指标信息,默认获取到当前日期，也可指定更新到某天
 def getAllStockDailyBasicInfo():
-    starttime = getMaxdateFromTable(connectDB.DAILYBASICTABLE)
-    if starttime >= NOWTIME:
-        print('当前信息已是最新')
+    _STARTTIME = _getMaxdateFromTable(connectDB.DAILYBASICTABLE)
+    if _STARTTIME >= _NOWTIME:
+        print('股票每日指标当前信息已是最新')
         return
 
-    begin = strTimeToTime(starttime)#转换成日期格式%Y-%m-%d
-    end = strTimeToTime(NOWTIME)
+    begin = _strTimeToTime(_STARTTIME)#转换成日期格式%Y-%m-%d
+    end = _strTimeToTime(_NOWTIME)
     for i in range(1,(end - begin).days+1):#按日期循环
         day = begin + datetime.timedelta(days=i)
         day = str(day).replace('-','')
-        getOneDayStockDailyBasicInfo(day)
+        _getOneDayStockDailyBasicInfo(day)
+        time.sleep(60/200)
 
 
-#获取表中最大日期,否则返回默认starttime
-def getMaxdateFromTable(tablename):
+#获取表中最大日期,否则返回默认_STARTTIME
+def _getMaxdateFromTable(tablename):
     sql = 'select max(trade_date) from ' + tablename
     try:
         connectDB.cursorDB.execute(sql)
         result = connectDB.cursorDB.fetchone()
         if result[0] == None:
-            return STARTTIME
-    #  elif result[0]<starttime:
-    #      return starttime
+            return _STARTTIME
+    #  elif result[0]<_STARTTIME:
+    #      return _STARTTIME
         else:
             a = int(result[0])
             return str(a)
     except:
-        return STARTTIME
+        return _STARTTIME
 
 
 #更新所有股票数据
@@ -225,9 +230,8 @@ def updateStockInfo():
     getAllTopListInfo()
     getAllTopInstInfo()
     getAllBlockTradeInfo()
+    return str('更新所有数据完毕')
+   
 
-getAllTopListInfo()
-getAllTopInstInfo()
-getAllBlockTradeInfo()
 # updateStockInfo()
 
