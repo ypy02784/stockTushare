@@ -9,7 +9,7 @@ import datetime
 from sqlalchemy import create_engine
 import sys
 
-import connectDB 
+import connectMySQL 
 
 _STARTTIME = '20190101'
 _NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
@@ -30,10 +30,10 @@ def updateStockbasicToDB():
     )  #默认获取上市股票基本信息，包含七个内容 ts_code，symbol,name,area,industry,market,list_date
     if len(stock_basic.values) == 0: return  #无数据则推出函数
     try:
-        if not (_deleteTableInfo(connectDB.STOCKBAISCTABLE)):
+        if not (_deleteTableInfo(connectMySQL.STOCKBAISCTABLE)):
             return  #删除表中数据失败则退出函数，避免重复数据
         stock_basic.to_sql(
-            connectDB.STOCKBAISCTABLE, connectDB.cn, index=False, if_exists='append')
+            connectMySQL.STOCKBAISCTABLE, connectMySQL.cn, index=False, if_exists='append')
         print('更新股票基本信息表成功，目前上市股票有%s个股' % (len(stock_basic.values)))
     except:
         print('更新股票基本信息表失败，请检查数据库后重新更新')
@@ -43,9 +43,9 @@ def updateStockbasicToDB():
 def _deleteTableInfo(tablename):
     sql = 'delete from ' + tablename
     try:
-        count= connectDB.cursorDB.execute(sql)
+        count= connectMySQL.cursorDB.execute(sql)
         print('删除原数据表'+tablename+'%s条数据'%(count))
-        connectDB.stockDB.commit()
+        connectMySQL.stockDB.commit()
         return True
     except:
         print('删除'+tablename+'表数据失败')  #出错的话就返回false
@@ -58,9 +58,9 @@ def updateCompanyInfoToDB():
     szse = tspro.stock_company(exchange='SZSE')  #获取深证公司信息
     if len(sse.values) == 0: return  #无数据则推出函数
     try:
-        if not (_deleteTableInfo(connectDB.COMPANYTABLE)): return
-        sse.to_sql(connectDB.COMPANYTABLE, connectDB.cn, index=False, if_exists='append')
-        szse.to_sql(connectDB.COMPANYTABLE, connectDB.cn, index=False, if_exists='append')
+        if not (_deleteTableInfo(connectMySQL.COMPANYTABLE)): return
+        sse.to_sql(connectMySQL.COMPANYTABLE, connectMySQL.cn, index=False, if_exists='append')
+        szse.to_sql(connectMySQL.COMPANYTABLE, connectMySQL.cn, index=False, if_exists='append')
         print('更新上市公司信息表成功，目前上市公司有%s家' % (len(sse.values) + len(szse.values)))
     except:
         print('更新上市公司信息表失败，请检查数据库后重新更新')
@@ -79,7 +79,7 @@ def _getOneDayStockDailyInfo(endtimetmp):
     df = tspro.daily(trade_date=endtimetmp)
     if len(df.values) == 0: return  #无数据则推出函数
     try:
-        df.to_sql(connectDB.DAILYTABLE, connectDB.cn, index=False, if_exists='append')
+        df.to_sql(connectMySQL.DAILYTABLE, connectMySQL.cn, index=False, if_exists='append')
         print('插入' + str(endtimetmp) + '股票交易信息共%s条' % (len(df.values)))
     except:
         print('插入' + str(endtimetmp) + '股票交易信息失败,请检查数据库是否开启！')
@@ -87,7 +87,7 @@ def _getOneDayStockDailyInfo(endtimetmp):
 
 #TODO:更新所有股票交易信息,默认获取到当前日期，也可指定更新到某天
 def getAllStockDailyInfo():
-    _STARTTIME = _getMaxdateFromTable(connectDB.DAILYTABLE)
+    _STARTTIME = _getMaxdateFromTable(connectMySQL.DAILYTABLE)
     if _STARTTIME >= _NOWTIME:
         print('股票交易信息当前信息已是最新')
         return
@@ -105,14 +105,14 @@ def _getOneDayTopListInfo(daytime):
     df = tspro.top_list(trade_date=daytime)
     if len(df.values) == 0: return  #无数据则推出函数
     try:
-        df.to_sql(connectDB.TOPLISTTABLE, connectDB.cn, index=False, if_exists='append')
+        df.to_sql(connectMySQL.TOPLISTTABLE, connectMySQL.cn, index=False, if_exists='append')
         print('插入' + str(daytime) + '龙虎榜信息共%s条' % (len(df.values)))
     except:
         print('插入' + str(daytime) + '龙虎榜信息失败,请检查数据库是否开启！')
         return
     
 def getAllTopListInfo():
-    _STARTTIME = _getMaxdateFromTable(connectDB.TOPLISTTABLE)
+    _STARTTIME = _getMaxdateFromTable(connectMySQL.TOPLISTTABLE)
     if _STARTTIME >= _NOWTIME:
         print('龙虎榜当前信息已是最新')
         return
@@ -130,14 +130,14 @@ def _getOneDayTopInstInfo(daytime):
     df = tspro.top_inst(trade_date=daytime)
     if len(df.values) == 0: return  #无数据则推出函数
     try:
-        df.to_sql(connectDB.TOPINSTTABLE, connectDB.cn, index=False, if_exists='append')
+        df.to_sql(connectMySQL.TOPINSTTABLE, connectMySQL.cn, index=False, if_exists='append')
         print('插入' + str(daytime) + '龙虎榜机构交易共%s条' % (len(df.values)))
     except:
         print('插入' + str(daytime) + '龙虎榜机构交易失败,请检查数据库是否开启！')
         return
     
 def getAllTopInstInfo():
-    _STARTTIME = _getMaxdateFromTable(connectDB.TOPINSTTABLE)
+    _STARTTIME = _getMaxdateFromTable(connectMySQL.TOPINSTTABLE)
     if _STARTTIME >= _NOWTIME:
         print('龙虎榜机构交易当前信息已是最新')
         return
@@ -155,14 +155,14 @@ def _getOneDayBlockTradeInfo(daytime):
     df = tspro.block_trade(trade_date=daytime)
     if len(df.values) == 0: return  #无数据则推出函数
     try:
-        df.to_sql(connectDB.BLOCKTRADETABLE, connectDB.cn, index=False, if_exists='append')
+        df.to_sql(connectMySQL.BLOCKTRADETABLE, connectMySQL.cn, index=False, if_exists='append')
         print('插入' + str(daytime) + '大宗交易共%s条' % (len(df.values)))
     except:
         print('插入' + str(daytime) + '大宗交易失败,请检查数据库是否开启！')
         return
     
 def getAllBlockTradeInfo():
-    _STARTTIME = _getMaxdateFromTable(connectDB.BLOCKTRADETABLE)
+    _STARTTIME = _getMaxdateFromTable(connectMySQL.BLOCKTRADETABLE)
     if _STARTTIME >= _NOWTIME:
         print('大宗交易当前信息已是最新')
         return
@@ -180,7 +180,7 @@ def _getOneDayStockDailyBasicInfo(endtimetmp):
     df = tspro.daily_basic(ts_code='', trade_date=endtimetmp)
     if len(df.values) == 0: return #无数据则推出函数
     try:
-        df.to_sql(connectDB.DAILYBASICTABLE, connectDB.cn, index=False, if_exists='append')
+        df.to_sql(connectMySQL.DAILYBASICTABLE, connectMySQL.cn, index=False, if_exists='append')
         print('插入' + str(endtimetmp) + '每日指标信息共%s条' % (len(df.values)))
     except:
         print('插入' + str(endtimetmp) + '每日指标信息失败,请检查数据库是否开启！')
@@ -189,7 +189,7 @@ def _getOneDayStockDailyBasicInfo(endtimetmp):
 
 #TODO:更新所有股票每日指标信息,默认获取到当前日期，也可指定更新到某天
 def getAllStockDailyBasicInfo():
-    _STARTTIME = _getMaxdateFromTable(connectDB.DAILYBASICTABLE)
+    _STARTTIME = _getMaxdateFromTable(connectMySQL.DAILYBASICTABLE)
     if _STARTTIME >= _NOWTIME:
         print('股票每日指标当前信息已是最新')
         return
@@ -207,8 +207,8 @@ def getAllStockDailyBasicInfo():
 def _getMaxdateFromTable(tablename):
     sql = 'select max(trade_date) from ' + tablename
     try:
-        connectDB.cursorDB.execute(sql)
-        result = connectDB.cursorDB.fetchone()
+        connectMySQL.cursorDB.execute(sql)
+        result = connectMySQL.cursorDB.fetchone()
         if result[0] == None:
             return _STARTTIME
     #  elif result[0]<_STARTTIME:
@@ -233,5 +233,5 @@ def updateStockInfo():
     return str('更新所有数据完毕')
    
 
-# updateStockInfo()
+updateStockInfo()
 
