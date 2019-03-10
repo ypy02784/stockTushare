@@ -9,8 +9,8 @@ import pymysql
 import time
 
 #程序单元导入
-from connectDB import stockDB, cursorDB, DAILYBASICTABLE, DAILYTABLE, STOCKBAISCTABLE, COMPANYTABLE
-from getStockInfoV3 import updateStockInfo,updateStockbasicToDB,updateCompanyInfoToDB,getAllBlockTradeInfo,getAllStockDailyBasicInfo,getAllStockDailyInfo,getAllTopInstInfo,getAllTopListInfo
+from connectMySQL import stockDB, cursorDB, DAILYBASICTABLE, DAILYTABLE, STOCKBAISCTABLE, COMPANYTABLE
+from getStockInfoMySQL import updateStockInfo,updateStockbasicToDB,updateCompanyInfoToDB,getAllBlockTradeInfo,getAllStockDailyBasicInfo,getAllStockDailyInfo,getAllTopInstInfo,getAllTopListInfo
 
 
 class MyWindow(QMainWindow, Ui_MainWindow):

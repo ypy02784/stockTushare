@@ -1,7 +1,7 @@
 import pymysql
 from sqlalchemy import create_engine
 import sys
-import initialDBV2
+import initialMySQL
 
 mysqlDB = 'information_schema'  #mysql系统表
 DBname = 'stocktushare'  #系统使用的数据库名称
@@ -40,7 +40,7 @@ if isDBnotExist():  #数据库不存在
     while a != 'Y' and a != 'N':
         a = str.upper(input('数据库不存在，是否执行数据库初始化操作？（Y/N）：'))  #默认只能输入Y或者N
     try:
-        if a == 'Y': initialDBV2.initialDB()  #是则初始化
+        if a == 'Y': initialMySQL.initialDB()  #是则初始化
         else:
             print('数据库不存在，系统将退出！')
             sys.exit()  #否则退出
