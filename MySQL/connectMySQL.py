@@ -1,7 +1,7 @@
 import pymysql
 from sqlalchemy import create_engine
 import sys
-import initialMySQL
+from MySQL import initialMySQL
 
 mysqlDB = 'information_schema'  #mysql系统表
 DBname = 'stocktushare'  #系统使用的数据库名称
@@ -52,8 +52,8 @@ if isDBnotExist():  #数据库不存在
 
 try:
     # 打开数据库连接  使用mysql连接数库
-    stockDB = pymysql.connect("localhost", "root", "", DBname, charset='utf8')
-    cursorDB = stockDB.cursor()  # 使用 cursor() 方法创建一个游标对象 cursor
+    DBCon = pymysql.connect("localhost", "root", "", DBname, charset='utf8')
+    DBCur = DBCon.cursor()  # 使用 cursor() 方法创建一个游标对象 cursor
 except:
     print('请检查数据库是否正常,stocktushare数据库可能不存在，请执行初始化数据库功能！！！')
     sys.exit()

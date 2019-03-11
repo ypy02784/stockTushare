@@ -1,7 +1,7 @@
 #V3版，所有当天交易数据存在daily表中，所有交易指标存在dailybasic表中,不在更新单条股票信息，daily表和daily_basic表都按天更新全部信息
 #该文件只提供各种股票信息的获取，数据库维护将另建一个文件
 #coding=utf-8
-import pymysql
+
 import tushare as ts
 import time
 import datetime
@@ -9,7 +9,7 @@ import datetime
 # from sqlalchemy import create_engine
 import sys
 
-import connectMySQL 
+from MySQL import connectMySQL
 
 _STARTTIME = '20190101'
 _NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
@@ -43,9 +43,9 @@ def updateStockbasicToDB():
 def _deleteTableInfo(tablename):
     sql = 'delete from ' + tablename
     try:
-        count= connectMySQL.cursorDB.execute(sql)
+        count = connectMySQL.DBCur.execute(sql)
         print('删除原数据表'+tablename+'%s条数据'%(count))
-        connectMySQL.stockDB.commit()
+        connectMySQL.DBCon.commit()
         return True
     except:
         print('删除'+tablename+'表数据失败')  #出错的话就返回false
@@ -96,7 +96,7 @@ def getAllStockDailyInfo():
     end = _strTimeToTime(_NOWTIME)
     for i in range(1,(end - begin).days+1):#按日期循环
         day = begin + datetime.timedelta(days=i)
-        day = str(day).replace('-','')
+        day = str(day).replace('-', '')
         _getOneDayStockDailyInfo(day)
         time.sleep(60/200)
 
@@ -207,8 +207,8 @@ def getAllStockDailyBasicInfo():
 def _getMaxdateFromTable(tablename):
     sql = 'select max(trade_date) from ' + tablename
     try:
-        connectMySQL.cursorDB.execute(sql)
-        result = connectMySQL.cursorDB.fetchone()
+        connectMySQL.DBCur.execute(sql)
+        result = connectMySQL.DBCur.fetchone()
         if result[0] == None:
             return _STARTTIME
     #  elif result[0]<_STARTTIME:
@@ -233,5 +233,5 @@ def updateStockInfo():
     return str('更新所有数据完毕')
    
 
-#updateStockInfo()
+updateStockInfo()
 

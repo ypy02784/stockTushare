@@ -9,7 +9,7 @@ import datetime
 # from sqlalchemy import create_engine
 import sys
 
-import connectSQLite 
+from SQLite import connectSQLite
 
 _STARTTIME = '20190301'
 _NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
@@ -46,9 +46,9 @@ def updateStockbasicToDB():
 def _deleteTableInfo(tablename):
     sql = 'delete from ' + tablename
     try:
-        count= connectSQLite.sqliteCur.execute(sql).fetchone()
+        count= connectSQLite.DBCur.execute(sql).fetchone()
         print('删除原数据表'+tablename+'%s条数据'%(count))
-        connectSQLite.sqliteCon.commit()
+        connectSQLite.DBCon.commit()
         return True
     except:
         print('删除'+tablename+'表数据失败')  #出错的话就返回false
@@ -216,7 +216,7 @@ def getAllStockDailyBasicInfo():
 def _getMaxdateFromTable(tablename):
     sql = 'select max(trade_date) from ' + tablename
     try:
-        sqliteCur = connectSQLite.sqliteCon.cursor()
+        sqliteCur = connectSQLite.DBCon.cursor()
         sqliteCur.execute(sql)
         result = sqliteCur.fetchone()
         if result[0] == None:

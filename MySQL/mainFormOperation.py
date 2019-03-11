@@ -6,8 +6,8 @@ from PyQt5.QtCore import Qt
 from UI.mainForm import *
 import time
 #程序单元导入
-from connectMySQL  import stockDB, cursorDB, DAILYBASICTABLE, DAILYTABLE, STOCKBAISCTABLE, COMPANYTABLE
-from getStockInfoMySQL import updateStockInfo,updateStockbasicToDB,updateCompanyInfoToDB,getAllBlockTradeInfo,getAllStockDailyBasicInfo,getAllStockDailyInfo,getAllTopInstInfo,getAllTopListInfo
+from MySQL.connectMySQL import DBCon, DBCur, DAILYBASICTABLE, DAILYTABLE, STOCKBAISCTABLE, COMPANYTABLE
+from MySQL.getStockInfoMySQL import getAllStockDailyInfo,updateStockInfo,updateStockbasicToDB,updateCompanyInfoToDB,getAllBlockTradeInfo,getAllStockDailyBasicInfo,getAllTopInstInfo,getAllTopListInfo
 
 
 class MyWindow(QMainWindow, Ui_MainWindow):
@@ -110,8 +110,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         else: #TODO:弹出对话框说明无数据    
             dialog= QDialog()  
             label =QLabel('没有'+self.selectData+'龙虎榜机构交易数据数据',dialog)
-            label.move(50,50)
-            dialog.resize(400,200)
+            label.move(50, 50)
+            dialog.resize(400, 200)
             dialog.setWindowTitle("提示")
             #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
             dialog.setWindowModality(Qt.ApplicationModal)
@@ -380,44 +380,44 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     def _getDailyBasicInfo(self, temDay=NOWTIME):
         sql = 'select * from daily_basic where trade_date = ' + temDay + ' GROUP BY ts_code  '
-        cursorDB.execute(sql)
-        df = cursorDB.fetchall()
-        stockDB.commit()
+        DBCur.execute(sql)
+        df = DBCur.fetchall()
+        DBCon.commit()
         return df
 
     def _getStockBasicInfo(self):
         sql = 'select * from stock_basic '
-        cursorDB.execute(sql)
-        df = cursorDB.fetchall()
-        stockDB.commit()
+        DBCur.execute(sql)
+        df = DBCur.fetchall()
+        DBCon.commit()
         return df
 
     def _getCompanyInfo(self):
         sql = 'select * from stock_company '
-        cursorDB.execute(sql)
-        df = cursorDB.fetchall()
-        stockDB.commit()
+        DBCur.execute(sql)
+        df = DBCur.fetchall()
+        DBCon.commit()
         return df
     
     def _getTopListInfo(self,temDay=NOWTIME):
         sql = 'select * from top_list where trade_date = ' + temDay + ' GROUP BY ts_code '
-        cursorDB.execute(sql)
-        df = cursorDB.fetchall()
-        stockDB.commit()
+        DBCur.execute(sql)
+        df = DBCur.fetchall()
+        DBCon.commit()
         return df
     
     def _getTopInstInfo(self,temDay=NOWTIME):
         sql = 'select * from top_inst where trade_date = ' + temDay + ' GROUP BY ts_code '
-        cursorDB.execute(sql)
-        df = cursorDB.fetchall()
-        stockDB.commit()
+        DBCur.execute(sql)
+        df = DBCur.fetchall()
+        DBCon.commit()
         return df
 
     def _getBlockTradeInfo(self,temDay=NOWTIME):
         sql = 'select * from block_trade where trade_date = ' + temDay + ' GROUP BY ts_code '
-        cursorDB.execute(sql)
-        df = cursorDB.fetchall()
-        stockDB.commit()
+        DBCur.execute(sql)
+        df = DBCur.fetchall()
+        DBCon.commit()
         return df
 
 if __name__ == '__main__':

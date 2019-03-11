@@ -61,4 +61,4 @@ def initialDB():
 
 
 #只需调用initialDB函数即可完成数据库初始化
-initialDB()
+
