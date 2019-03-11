@@ -1,143 +1,147 @@
 # noinspection PyInterpreter
 import sys
-sys.path.append("./")#中上级目录为./
-from PyQt5.QtWidgets import QApplication, QMainWindow,QLabel,QDialog  #TODO:由于pyqt是用C编译的，所以vscode在编译时报错，但不影响使用
+from typing import List, Any
+
+sys.path.append("./")  # 中上级目录为./
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QDialog  # TODO:由于pyqt是用C编译的，所以vscode在编译时报错，但不影响使用
 from PyQt5.QtCore import Qt
 from UI.mainForm import *
 import time
-#程序单元导入
-from MySQL.connectMySQL import DBCon, DBCur, DAILYBASICTABLE, DAILYTABLE, STOCKBAISCTABLE, COMPANYTABLE
-from MySQL.getStockInfoMySQL import getAllStockDailyInfo,updateStockInfo,updateStockbasicToDB,updateCompanyInfoToDB,getAllBlockTradeInfo,getAllStockDailyBasicInfo,getAllTopInstInfo,getAllTopListInfo
+# 程序单元导入
+from SQLite import  connectSQLite
+
 
 
 class MyWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
         self.setupUi(self)
-        self.pushDailyButton.clicked.connect(self.pushDailyButtonClicked)
+        self.pushDailyButton.clicked.connect(self.push_daily_button_clicked)
         self.pushDailyBasicButton.clicked.connect(
-            self.pushDailyBasicButtonClicked)
+            self.push_daily_basic_button_clicked)
         self.pushStockBasicButton.clicked.connect(
-            self.pushStockBasicButtonClicked)
-        self.pushCompanyButton.clicked.connect(self.pushCompanyButtonClicked)
-        self.pushToplistButton.clicked.connect(self.pushTopListButtonClicked)
-        self.pushTopInstButton.clicked.connect(self.pushTopInstButtonClicked)
-        self.pushBlockTradeButton.clicked.connect(self.pushBlockTradeButtonClicked)
+            self.push_stock_basic_button_clicked)
+        self.pushCompanyButton.clicked.connect(self.push_company_button_clicked)
+        self.pushToplistButton.clicked.connect(self.push_top_list_button_clicked)
+        self.pushTopInstButton.clicked.connect(self.push_top_inst_button_clicked)
+        self.pushBlockTradeButton.clicked.connect(self.push_block_trade_button_clicked)
         self.action_update_Daily_Info.triggered.connect(self.action_daily_clicked)
-        self.calendarWidget.selectionChanged.connect(self.calendarWidgetSelected)
+        self.calendarWidget.selectionChanged.connect(self.calendar_widget_selected)
         self.selectData = self.calendarWidget.selectedDate().toString(
-            Qt.ISODate).replace('-', '')  #去掉时间中的‘-’,从2019-03-01转换成20190301格式
+            Qt.ISODate).replace('-', '')  # 去掉时间中的‘-’,从2019-03-01转换成20190301格式
 
     global selectData
     DBname = 'stocktushare'
-    NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
+    NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  # 默认系统当前日期
 
-    def calendarWidgetSelected(self):
+    def calendar_widget_selected(self):
         self.selectData = self.calendarWidget.selectedDate().toString(
-            Qt.ISODate).replace('-', '') 
+            Qt.ISODate).replace('-', '')
 
-    def pushDailyButtonClicked(self):
-        model = self._setDailyModel(self._getDailyinfo(self.selectData))
-        if model !=0 :self.tableView.setModel(model) 
-        else: #TODO:弹出对话框说明无数据    
-            dialog= QDialog()  
-            label =QLabel('没有'+self.selectData+'交易数据',dialog)
-            label.move(50,50)
-            dialog.resize(400,200)
-            dialog.setWindowTitle("提示")
-            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
-            dialog.setWindowModality(Qt.ApplicationModal)
-            dialog.exec_()
-
-        
-
-    def pushDailyBasicButtonClicked(self):
-        model = self._setDailyBasickModel(
-            self._getDailyBasicInfo(self.selectData))
-        if model !=0 :self.tableView.setModel(model)
-        else: #TODO:弹出对话框说明无数据    
-            dialog= QDialog()  
-            label =QLabel('没有'+self.selectData+'交易指标数据',dialog)
-            label.move(50,50)
-            dialog.resize(400,200)
-            dialog.setWindowTitle("提示")
-            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
-            dialog.setWindowModality(Qt.ApplicationModal)
-            dialog.exec_()
-      
-    def pushStockBasicButtonClicked(self):
-        model = self._setStockBasickModel(self._getStockBasicInfo())
-        if model !=0 :self.tableView.setModel(model)
-        else: #TODO:弹出对话框说明无数据    
-            dialog= QDialog()  
-            label =QLabel('没有股票基本信息数据',dialog)
-            label.move(50,50)
-            dialog.setWindowTitle("提示")
-            dialog.resize(400,200)
-            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
-            dialog.setWindowModality(Qt.ApplicationModal)
-            dialog.exec_()
-
-    def pushCompanyButtonClicked(self):
-        model = self._setCompanyModel(self._getCompanyInfo())
-        if model !=0 :self.tableView.setModel(model)
-        else: #TODO:弹出对话框说明无数据    
-            dialog= QDialog()  
-            label =QLabel('没有公司基本信息数据',dialog)
-            label.move(50,50)
-            dialog.setWindowTitle("提示")
-            dialog.resize(400,200)
-            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
-            dialog.setWindowModality(Qt.ApplicationModal)
-            dialog.exec_()
-
-    def pushTopListButtonClicked(self):
-        model = self._setToplistModel(self._getTopListInfo(self.selectData))
-        if model !=0 :self.tableView.setModel(model)
-        else: #TODO:弹出对话框说明无数据    
-            dialog= QDialog()  
-            label =QLabel('没有'+self.selectData+'龙虎榜数据数据',dialog)
-            label.move(50,50)
-            dialog.resize(400,200)
-            dialog.setWindowTitle("提示")
-            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
-            dialog.setWindowModality(Qt.ApplicationModal)
-            dialog.exec_()
-
-    def pushTopInstButtonClicked(self):
-        model = self._setTopInstModel(self._getTopInstInfo(self.selectData))
-        if model !=0 :self.tableView.setModel(model)
-        else: #TODO:弹出对话框说明无数据    
-            dialog= QDialog()  
-            label =QLabel('没有'+self.selectData+'龙虎榜机构交易数据数据',dialog)
+    def push_daily_button_clicked(self):
+        model = self._set_daily_model(self._get_daily_info(self.selectData))
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有' + self.selectData + '交易数据', dialog)
             label.move(50, 50)
             dialog.resize(400, 200)
             dialog.setWindowTitle("提示")
-            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
             dialog.setWindowModality(Qt.ApplicationModal)
             dialog.exec_()
 
-    
-    def pushBlockTradeButtonClicked(self):
-        model = self._setBlockTradeModel(self._getBlockTradeInfo(self.selectData))
-        if model !=0 :self.tableView.setModel(model)
-        else: #TODO:弹出对话框说明无数据    
-            dialog= QDialog()  
-            label =QLabel('没有'+self.selectData+'大宗交易数据数据',dialog)
-            label.move(50,50)
-            dialog.resize(400,200)
+    def push_daily_basic_button_clicked(self):
+        model = self._set_daily_basick_model(
+            self._get_daily_basic_info(self.selectData))
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有' + self.selectData + '交易指标数据', dialog)
+            label.move(50, 50)
+            dialog.resize(400, 200)
             dialog.setWindowTitle("提示")
-            #设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    def push_stock_basic_button_clicked(self):
+        model = self._set_stock_basick_model(self._get_stock_basic_info())
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有股票基本信息数据', dialog)
+            label.move(50, 50)
+            dialog.setWindowTitle("提示")
+            dialog.resize(400, 200)
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    def push_company_button_clicked(self):
+        model = self._set_company_model(self._get_company_info())
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有公司基本信息数据', dialog)
+            label.move(50, 50)
+            dialog.setWindowTitle("提示")
+            dialog.resize(400, 200)
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    def push_top_list_button_clicked(self):
+        model = self._set_toplist_model(self._get_top_list_info(self.selectData))
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有' + self.selectData + '龙虎榜数据数据', dialog)
+            label.move(50, 50)
+            dialog.resize(400, 200)
+            dialog.setWindowTitle("提示")
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    def push_top_inst_button_clicked(self):
+        model = self._set_top_inst_model(self._get_top_inst_info(self.selectData))
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有' + self.selectData + '龙虎榜机构交易数据数据', dialog)
+            label.move(50, 50)
+            dialog.resize(400, 200)
+            dialog.setWindowTitle("提示")
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    def push_block_trade_button_clicked(self):
+        model = self._set_block_trade_model(self._get_block_trade_info(self.selectData))
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有' + self.selectData + '大宗交易数据数据', dialog)
+            label.move(50, 50)
+            dialog.resize(400, 200)
+            dialog.setWindowTitle("提示")
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
             dialog.setWindowModality(Qt.ApplicationModal)
             dialog.exec_()
 
     def action_daily_clicked(self):
-        getAllStockDailyInfo()
+        return
 
-    
-
-    #设置股票交易信息model,参数为数据库查找返回数据集
-    def _setDailyModel(self, df):
+    # 设置股票交易信息model,参数为数据库查找返回数据集
+    def _set_daily_model(self, df):
         """
         股票交易信息Model
         函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -168,8 +172,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
         return model
 
-    #设置股票指标信息model,参数为数据库查找返回数据集
-    def _setDailyBasickModel(self, df):
+    # 设置股票指标信息model,参数为数据库查找返回数据集
+    def _set_daily_basick_model(self, df):
         """
         股票指标信息Model
         函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -205,8 +209,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
         return model
 
-    #设置股票基本信息model,参数为数据库查找返回数据集
-    def _setStockBasickModel(self, df):
+    # 设置股票基本信息model,参数为数据库查找返回数据集
+    def _set_stock_basick_model(self, df):
         """
         股票基本信息Model
         函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -240,8 +244,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
         return model
 
-    #设置公司信息model,参数为数据库查找返回数据集
-    def _setCompanyModel(self, df):
+    # 设置公司信息model,参数为数据库查找返回数据集
+    def _set_company_model(self, df):
         """
         公司信息Model
         函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -277,8 +281,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
         return model
 
-    #设置龙虎榜信息model,参数为数据库查找返回数据集
-    def _setToplistModel(self, df):
+    # 设置龙虎榜信息model,参数为数据库查找返回数据集
+    def _set_toplist_model(self, df):
         """
         股票交易信息Model
         函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -313,8 +317,8 @@ class MyWindow(QMainWindow, Ui_MainWindow):
                 model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
         return model
 
-    #设置龙虎榜机构交易信息model,参数为数据库查找返回数据集
-    def _setTopInstModel(self, df):
+    # 设置龙虎榜机构交易信息model,参数为数据库查找返回数据集
+    def _set_top_inst_model(self, df):
         """
         股票交易信息Model
         函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -335,14 +339,15 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         model.setHorizontalHeaderItem(5, QtGui.QStandardItem('卖出额（万）'))
         model.setHorizontalHeaderItem(6, QtGui.QStandardItem('卖出占总成交比例'))
         model.setHorizontalHeaderItem(7, QtGui.QStandardItem('净成交额（万）'))
-        
+
         for i in range(row):
             for j in range(vol):
                 tmp_data = df[i][j]
                 model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
         return model
-    #设置大宗交易信息model,参数为数据库查找返回数据集
-    def _setBlockTradeModel(self, df):
+
+    # 设置大宗交易信息model,参数为数据库查找返回数据集
+    def _set_block_trade_model(self, df):
         """
         股票交易信息Model
         函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -362,63 +367,62 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         model.setHorizontalHeaderItem(4, QtGui.QStandardItem('成交金额'))
         model.setHorizontalHeaderItem(5, QtGui.QStandardItem('买方营业部'))
         model.setHorizontalHeaderItem(6, QtGui.QStandardItem('卖方营业部'))
-      
-        
+
         for i in range(row):
             for j in range(vol):
                 tmp_data = df[i][j]
                 model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
         return model
 
-
-    def _getDailyinfo(self, temDay=NOWTIME):
+    def _get_daily_info(self, temDay=NOWTIME):
         sql = 'select * from daily where trade_date = ' + temDay + ' GROUP BY ts_code  '
-        DBCur.execute(sql)
-        df = DBCur.fetchall()
-        DBCon.commit()
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
         return df
 
-    def _getDailyBasicInfo(self, temDay=NOWTIME):
+    def _get_daily_basic_info(self, temDay=NOWTIME):
         sql = 'select * from daily_basic where trade_date = ' + temDay + ' GROUP BY ts_code  '
-        DBCur.execute(sql)
-        df = DBCur.fetchall()
-        DBCon.commit()
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
         return df
 
-    def _getStockBasicInfo(self):
+    def _get_stock_basic_info(self):
         sql = 'select * from stock_basic '
-        DBCur.execute(sql)
-        df = DBCur.fetchall()
-        DBCon.commit()
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
         return df
 
-    def _getCompanyInfo(self):
+    def _get_company_info(self):
         sql = 'select * from stock_company '
-        DBCur.execute(sql)
-        df = DBCur.fetchall()
-        DBCon.commit()
-        return df
-    
-    def _getTopListInfo(self,temDay=NOWTIME):
-        sql = 'select * from top_list where trade_date = ' + temDay + ' GROUP BY ts_code '
-        DBCur.execute(sql)
-        df = DBCur.fetchall()
-        DBCon.commit()
-        return df
-    
-    def _getTopInstInfo(self,temDay=NOWTIME):
-        sql = 'select * from top_inst where trade_date = ' + temDay + ' GROUP BY ts_code '
-        DBCur.execute(sql)
-        df = DBCur.fetchall()
-        DBCon.commit()
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
         return df
 
-    def _getBlockTradeInfo(self,temDay=NOWTIME):
-        sql = 'select * from block_trade where trade_date = ' + temDay + ' GROUP BY ts_code '
-        DBCur.execute(sql)
-        df = DBCur.fetchall()
-        DBCon.commit()
+    def _get_top_list_info(self, temDay=NOWTIME):
+        sql = 'select * from top_list where trade_date = ' + temDay + ' GROUP BY ts_code '
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
         return df
+
+    def _get_top_inst_info(self, temDay=NOWTIME):
+        sql = 'select * from top_inst where trade_date = ' + temDay + ' GROUP BY ts_code '
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
+        return df
+
+    def _get_block_trade_info(self, temDay=NOWTIME):
+        sql = 'select * from block_trade where trade_date = ' + temDay + ' GROUP BY ts_code '
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
+        return df
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
