@@ -1,17 +1,12 @@
+# noinspection PyInterpreter
 import sys
-sys.path.append("./")#vscdoe中上级目录为./
-from PyQt5.QtWidgets import QApplication, QMainWindow,QLabel,QDialog,QPushButton  #TODO:由于pyqt是用C编译的，所以vscode在编译时报错，但不影响使用
-from PyQt5.QtCore import Qt, QDate
-from PyQt5 import QtSql
-from PyQt5.QtSql import QSqlDatabase, QSqlTableModel, QSqlQueryModel
-
+sys.path.append("./")#中上级目录为./
+from PyQt5.QtWidgets import QApplication, QMainWindow,QLabel,QDialog  #TODO:由于pyqt是用C编译的，所以vscode在编译时报错，但不影响使用
+from PyQt5.QtCore import Qt
 from UI.mainForm import *
-
-import pymysql
 import time
-
 #程序单元导入
-from connectMySQL import stockDB, cursorDB, DAILYBASICTABLE, DAILYTABLE, STOCKBAISCTABLE, COMPANYTABLE
+from connectMySQL  import stockDB, cursorDB, DAILYBASICTABLE, DAILYTABLE, STOCKBAISCTABLE, COMPANYTABLE
 from getStockInfoMySQL import updateStockInfo,updateStockbasicToDB,updateCompanyInfoToDB,getAllBlockTradeInfo,getAllStockDailyBasicInfo,getAllStockDailyInfo,getAllTopInstInfo,getAllTopListInfo
 
 
