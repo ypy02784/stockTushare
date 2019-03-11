@@ -246,5 +246,5 @@ def updateStockInfo():
     return str('更新所有数据完毕')
    
 
-updateStockInfo()
+# updateStockInfo()
 

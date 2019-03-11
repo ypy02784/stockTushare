@@ -373,9 +373,9 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     def _getDailyinfo(self, temDay=NOWTIME):
         sql = 'select * from daily where trade_date = ' + temDay + ' GROUP BY ts_code  '
-        cursorDB.execute(sql)
-        df = cursorDB.fetchall()
-        stockDB.commit()
+        DBCur.execute(sql)
+        df = DBCur.fetchall()
+        DBCon.commit()
         return df
 
     def _getDailyBasicInfo(self, temDay=NOWTIME):
