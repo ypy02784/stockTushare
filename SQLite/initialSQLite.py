@@ -3,7 +3,7 @@
 
 import pymysql
 import sys,os
-import connectSQLite
+from SQLite import connectSQLite
 
 
 DBname = 'stocktushare'
