@@ -8,7 +8,7 @@ from SQLite import connectSQLite
 
 DBname = 'stocktushare'
 
-def _createSQLiteTable():
+def _create_sq_lite_table():
     file_list = _get_file_name('.//sql')#默认从sql文件夹中读取文件，TODO:在此之前应该判断该文件夹是否存在，不存在提醒并退出
     for file in file_list:
         if file == '' or not file:
@@ -54,11 +54,11 @@ def _get_file_name(file_dir):#查找sqlite文件下sql文件名，并返回list�
 
 
 #初始化数据库，
-def initialDB():
+def initial_db():
     
-    _createSQLiteTable()
+    _create_sq_lite_table()
     print('数据库初始化完成！！！')
 
 
 #只需调用initialDB函数即可完成数据库初始化
-initialDB()
+
