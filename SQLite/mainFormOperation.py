@@ -5,18 +5,19 @@ from typing import List, Any
 sys.path.append("./")  # 中上级目录为./
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QDialog  # TODO:由于pyqt是用C编译的，所以vscode在编译时报错，但不影响使用
 from PyQt5.QtCore import Qt
-from UI.mainForm import *
+from UI.mainForm import Ui_MainWindow
 import time
 # 程序单元导入
-from SQLite import  connectSQLite
-from SQLite import  model_qtableview
-
+from SQLite import connectSQLite
+from SQLite import model_qtableview
+from SQLite.upsdownsFmOperation import upsdownsWindow
 
 
 class MyWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
         self.setupUi(self)
+
         self.pushDailyButton.clicked.connect(self.push_daily_button_clicked)
         self.pushDailyBasicButton.clicked.connect(
             self.push_daily_basic_button_clicked)
@@ -26,14 +27,16 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.pushToplistButton.clicked.connect(self.push_top_list_button_clicked)
         self.pushTopInstButton.clicked.connect(self.push_top_inst_button_clicked)
         self.pushBlockTradeButton.clicked.connect(self.push_block_trade_button_clicked)
-        self.action_update_Daily_Info.triggered.connect(self.action_daily_clicked)
+
         self.calendarWidget.selectionChanged.connect(self.calendar_widget_selected)
         self.selectData = self.calendarWidget.selectedDate().toString(
             Qt.ISODate).replace('-', '')  # 去掉时间中的‘-’,从2019-03-01转换成20190301格式
-
+        # self.testfrom = upsdownsWindow()
+        self.action_ups_and_downs.triggered.connect(self._upsdowns_show)
     global selectData
     DBname = 'stocktushare'
     NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  # 默认系统当前日期
+    upsdownsFm = upsdownsWindow
 
     def calendar_widget_selected(self):
         self.selectData = self.calendarWidget.selectedDate().toString(
@@ -138,11 +141,6 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             dialog.setWindowModality(Qt.ApplicationModal)
             dialog.exec_()
 
-    def action_daily_clicked(self):
-        return
-
-
-
     def _get_daily_info(self, temDay=NOWTIME):
         sql = 'select * from daily where trade_date = ' + temDay + ' GROUP BY ts_code  '
         connectSQLite.DBCur.execute(sql)
@@ -192,10 +190,13 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         connectSQLite.DBCon.commit()
         return df
 
+    def _upsdowns_show(self):
+        self.upsdownsFm = upsdownsWindow()
+        self.upsdownsFm.showMaximized()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     myWin = MyWindow()
-    myWin.show()
+    myWin.showMaximized()
 
     app.exec_()

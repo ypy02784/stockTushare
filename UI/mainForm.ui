@@ -6,268 +6,103 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>827</width>
-    <height>560</height>
+    <width>613</width>
+    <height>387</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>100</height>
-   </size>
-  </property>
   <property name="windowTitle">
-   <string>tushare主界面</string>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="QFrame" name="frame">
+     <widget class="QGroupBox" name="groupBox">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QTableView" name="tableView">
+         <property name="minimumSize">
+          <size>
+           <width>380</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="baseSize">
+          <size>
+           <width>380</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="groupBox_2">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QTableView" name="tableView">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>楷体_GB2312</family>
-          </font>
+        <widget class="QCalendarWidget" name="calendarWidget">
+         <property name="verticalHeaderFormat">
+          <enum>QCalendarWidget::NoVerticalHeader</enum>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QFrame" name="basicinfofarme">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+        <widget class="QPushButton" name="pushDailyButton">
+         <property name="text">
+          <string>查看选定日期股票交易信息</string>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::Panel</enum>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushDailyBasicButton">
+         <property name="text">
+          <string>查看选定日期股票指标信息</string>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushStockBasicButton">
+         <property name="text">
+          <string>查看股票基本信息</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QCalendarWidget" name="calendarWidget">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>100</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>楷体_GB2312</family>
-             </font>
-            </property>
-            <property name="minimumDate">
-             <date>
-              <year>2011</year>
-              <month>1</month>
-              <day>1</day>
-             </date>
-            </property>
-            <property name="maximumDate">
-             <date>
-              <year>2030</year>
-              <month>12</month>
-              <day>31</day>
-             </date>
-            </property>
-            <property name="gridVisible">
-             <bool>true</bool>
-            </property>
-            <property name="horizontalHeaderFormat">
-             <enum>QCalendarWidget::ShortDayNames</enum>
-            </property>
-            <property name="verticalHeaderFormat">
-             <enum>QCalendarWidget::NoVerticalHeader</enum>
-            </property>
-            <property name="navigationBarVisible">
-             <bool>true</bool>
-            </property>
-            <property name="dateEditEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushDailyButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>楷体_GB2312</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="contextMenuPolicy">
-             <enum>Qt::DefaultContextMenu</enum>
-            </property>
-            <property name="text">
-             <string>查看选定日期股票交易信息</string>
-            </property>
-            <property name="checkable">
-             <bool>false</bool>
-            </property>
-            <property name="default">
-             <bool>false</bool>
-            </property>
-            <property name="flat">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushDailyBasicButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>楷体_GB2312</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>查看选定日期股票指标信息</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushStockBasicButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>楷体_GB2312</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>查看股票基本信息</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushCompanyButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>楷体_GB2312</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>查看公司基本信息</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushToplistButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>楷体_GB2312</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>查看龙虎榜信息</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushTopInstButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>楷体_GB2312</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>查看龙虎榜机构交易信息</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushBlockTradeButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="font">
-             <font>
-              <family>楷体_GB2312</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>查看大宗交易信息</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushCompanyButton">
+         <property name="text">
+          <string>查看公司基本信息</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushToplistButton">
+         <property name="text">
+          <string>查看龙虎榜信息</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushTopInstButton">
+         <property name="text">
+          <string>查看龙虎榜机构交易信息</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushBlockTradeButton">
+         <property name="text">
+          <string>查看大宗交易信息</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -275,122 +110,27 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
+  <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>827</width>
-     <height>18</height>
+     <width>613</width>
+     <height>19</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_dataupdate">
-    <property name="title">
-     <string>数据更新</string>
-    </property>
-    <addaction name="action_initialDB"/>
-    <addaction name="separator"/>
-    <addaction name="action_update_stock_basic"/>
-    <addaction name="action_update_company"/>
-    <addaction name="action_update_Daily_Info"/>
-    <addaction name="action_update_DailyBasic_Info"/>
-    <addaction name="action_top_list"/>
-    <addaction name="action_top_inst"/>
-    <addaction name="action_block_trade"/>
-    <addaction name="separator"/>
-    <addaction name="action_update_All"/>
-   </widget>
-   <widget class="QMenu" name="menu_sys">
-    <property name="title">
-     <string>文件</string>
-    </property>
-    <addaction name="action_close"/>
-   </widget>
    <widget class="QMenu" name="menu_analysis">
     <property name="title">
      <string>分析</string>
     </property>
     <addaction name="action_ups_and_downs"/>
-    <addaction name="action_turnover_rate"/>
    </widget>
-   <addaction name="menu_sys"/>
-   <addaction name="menu_dataupdate"/>
    <addaction name="menu_analysis"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_initialDB">
-   <property name="text">
-    <string>初始化数据库</string>
-   </property>
-  </action>
-  <action name="action_update_Daily_Info">
-   <property name="text">
-    <string>更新交易信息</string>
-   </property>
-  </action>
-  <action name="action_update_DailyBasic_Info">
-   <property name="text">
-    <string>更新交易指标信息</string>
-   </property>
-  </action>
-  <action name="action_update_stock_basic">
-   <property name="text">
-    <string>更新股票基本信息</string>
-   </property>
-  </action>
-  <action name="action_update_company">
-   <property name="text">
-    <string>更新公司信息</string>
-   </property>
-  </action>
-  <action name="action_update_All">
-   <property name="text">
-    <string>更新所有信息</string>
-   </property>
-  </action>
-  <action name="action78">
-   <property name="text">
-    <string>lk</string>
-   </property>
-  </action>
-  <action name="action_GROUP_BY_ts_code">
-   <property name="text">
-    <string>+ ' GROUP BY ts_code  ' </string>
-   </property>
-  </action>
-  <action name="action_close">
-   <property name="text">
-    <string>退出</string>
-   </property>
-  </action>
-  <action name="actionsdf">
-   <property name="text">
-    <string>sdf</string>
-   </property>
-  </action>
+  <widget class="QStatusBar" name="statusbar"/>
   <action name="action_ups_and_downs">
    <property name="text">
     <string>涨跌分析</string>
-   </property>
-  </action>
-  <action name="action_turnover_rate">
-   <property name="text">
-    <string>换手率分析</string>
-   </property>
-  </action>
-  <action name="action_top_list">
-   <property name="text">
-    <string>更新龙虎榜</string>
-   </property>
-  </action>
-  <action name="action_top_inst">
-   <property name="text">
-    <string>更新龙虎榜机构交易</string>
-   </property>
-  </action>
-  <action name="action_block_trade">
-   <property name="text">
-    <string>更新大宗交易信息</string>
    </property>
   </action>
  </widget>
