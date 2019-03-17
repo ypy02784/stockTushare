@@ -43,7 +43,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             Qt.ISODate).replace('-', '')
 
     def push_daily_button_clicked(self):
-        model = model_qtableview.set_daily_model(self._get_daily_info(self.selectData))
+        model = model_qtableview._setDailyModel(self._get_daily_info(self.selectData))
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
@@ -57,7 +57,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             dialog.exec_()
 
     def push_daily_basic_button_clicked(self):
-        model = model_qtableview.set_daily_basick_model(
+        model = model_qtableview._setDailyBasickModel(
             self._get_daily_basic_info(self.selectData))
         if model != 0:
             self.tableView.setModel(model)
@@ -72,7 +72,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             dialog.exec_()
 
     def push_stock_basic_button_clicked(self):
-        model = model_qtableview.set_stock_basick_model(self._get_stock_basic_info())
+        model = model_qtableview._setStockBasickModel(self._get_stock_basic_info())
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
@@ -86,7 +86,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             dialog.exec_()
 
     def push_company_button_clicked(self):
-        model = model_qtableview.set_company_model(self._get_company_info())
+        model = model_qtableview._setCompanyModel(self._get_company_info())
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
@@ -100,7 +100,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             dialog.exec_()
 
     def push_top_list_button_clicked(self):
-        model = model_qtableview.set_toplist_model(self._get_top_list_info(self.selectData))
+        model = model_qtableview._setToplistModel(self._get_top_list_info(self.selectData))
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
@@ -114,7 +114,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             dialog.exec_()
 
     def push_top_inst_button_clicked(self):
-        model = model_qtableview.set_top_inst_model(self._get_top_inst_info(self.selectData))
+        model = model_qtableview._setTopInstModel(self._get_top_inst_info(self.selectData))
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
@@ -128,7 +128,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             dialog.exec_()
 
     def push_block_trade_button_clicked(self):
-        model = model_qtableview.set_block_trade_model(self._get_block_trade_info(self.selectData))
+        model = model_qtableview._setBlockTradeModel(self._get_block_trade_info(self.selectData))
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据

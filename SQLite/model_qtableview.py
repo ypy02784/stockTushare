@@ -1,7 +1,8 @@
 from PyQt5 import QtGui
 
+
 # 设置股票交易信息model,参数为数据库查找返回数据集
-def _setDailyModel(self, df):
+def _setDailyModel( df):
     """
     股票交易信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -34,7 +35,7 @@ def _setDailyModel(self, df):
 
 
 # 设置股票指标信息model,参数为数据库查找返回数据集
-def _setDailyBasickModel(self, df):
+def _setDailyBasickModel( df):
     """
     股票指标信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -72,7 +73,7 @@ def _setDailyBasickModel(self, df):
 
 
 # 设置股票基本信息model,参数为数据库查找返回数据集
-def _setStockBasickModel(self, df):
+def _setStockBasickModel( df):
     """
     股票基本信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -108,7 +109,7 @@ def _setStockBasickModel(self, df):
 
 
 # 设置公司信息model,参数为数据库查找返回数据集
-def _setCompanyModel(self, df):
+def _setCompanyModel( df):
     """
     公司信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -146,7 +147,7 @@ def _setCompanyModel(self, df):
 
 
 # 设置龙虎榜信息model,参数为数据库查找返回数据集
-def _setToplistModel(self, df):
+def _setToplistModel( df):
     """
     股票交易信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -183,7 +184,7 @@ def _setToplistModel(self, df):
 
 
 # 设置龙虎榜机构交易信息model,参数为数据库查找返回数据集
-def _setTopInstModel(self, df):
+def _setTopInstModel( df):
     """
     股票交易信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
@@ -213,7 +214,7 @@ def _setTopInstModel(self, df):
 
 
 # 设置大宗交易信息model,参数为数据库查找返回数据集
-def _setBlockTradeModel(self, df):
+def _setBlockTradeModel( df):
     """
     股票交易信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
