@@ -245,5 +245,5 @@ def update_stock_info():
     return str('更新所有数据完毕')
    
 
-update_stock_info()
+# update_stock_info()
 
