@@ -8,6 +8,7 @@ import datetime
 import sys
 #自定义model
 from SQLite import connectSQLite
+# import connectSQLite
 
 _STARTTIME = '20190301'
 _NOWTIME = time.strftime('%Y%m%d', time.localtime(time.time()))  #默认系统当前日期
@@ -244,5 +245,5 @@ def update_stock_info():
     return str('更新所有数据完毕')
    
 
-# updateStockInfo()
+update_stock_info()
 
