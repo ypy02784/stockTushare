@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QLabel
 import sys
-from SQLite import connectSQLite
+from SQLite import connectSQLite, model_qtableview
 
 from UI.upsdownsFm import *
 
@@ -14,6 +15,8 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         self.comboBox_code.activated.connect(self._on_combobox_code_activate)
         self.textEdit_SQL.setText(self.query_sql)
         self.pushButton_add_query_info.clicked.connect(self._pushButton_add_query_info_clicked)
+        self.pushButton_dateselect.clicked.connect(self._pushButton_selectdate_clicked)
+        self.pushButton_query.clicked.connect(self._pushButton_query_clicked)
         # self.pushButton_daily.clicked.connect(self.pushbutton_daily_clicked)
         # self.pushButton_dailybasic.clicked.connect(self.pushbutton_daily_basic_clicked)
 
@@ -26,9 +29,10 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
     sql_str_pct_chg = ''
     sql_str_vol = ''
     combobox_item = ['>', '=', '<']
+    sql_str_date = ''
 
     query_sql: str = 'select * from daily where'  # 用来记录查询语句的
-    sub_query_sql: str = ' and ts_code in ( select ts_code from  daily_basic where' #用来子查询的语句
+    sub_query_sql: str = ' and ts_code in ( select ts_code from  daily_basic where'  # 用来子查询的语句
 
     # 初始化comboBox选项信息
     def _init_combobox_code(self):
@@ -62,9 +66,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         self.lineEdit_stock_code_name.setText(self.stockcodelist[index])
 
     def _lineEdit_stock_code_name_changed(self):
-        # if 'ts_code' in self.query_sql:
-        #     # 首先删除query_sql中的有关ts_code数据
-        #     self.query_sql = self.query_sql.replace(self.sql_str_code, '')
+        if 'ts_code' in self.query_sql:
+            # 首先删除query_sql中的有关ts_code数据
+            self.query_sql = self.query_sql.replace(self.sql_str_code, '')
         if self.lineEdit_stock_code_name.text() != '':
             self.sql_str_code = ''
             if 'where' != self.query_sql[
@@ -74,9 +78,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             self.query_sql += self.sql_str_code
 
     def _lineEidt_pct_chg_changed(self):
-        # if 'pct_chg' in self.query_sql:
-        #     # 首先删除query_sql中的有关ts_code数据
-        #     self.query_sql = self.query_sql.replace(self.sql_str_ptc_chg, '')
+        if 'pct_chg' in self.query_sql:
+            # 首先删除query_sql中的有关ts_code数据
+            self.query_sql = self.query_sql.replace(self.sql_str_pct_chg, '')
         if self.lineEdit_pct_chg.text() != '':
             self.sql_str_pct_chg = ''
             if 'where' != self.query_sql[
@@ -86,9 +90,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             self.query_sql += self.sql_str_pct_chg
 
     def _lineEdit_vol_changed(self):
-        # if 'vol' in self.query_sql:
-        #     # 首先删除query_sql中的有关vol数据
-        #     self.query_sql = self.query_sql.replace(self.sql_str_vol, '')
+        if 'vol' in self.query_sql:
+            # 首先删除query_sql中的有关vol数据
+            self.query_sql = self.query_sql.replace(self.sql_str_vol, '')
         if self.lineEdit_vol.text() != '':
             self.sql_str_vol = ''
             if 'where' != self.query_sql[
@@ -99,35 +103,36 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
 
     def _set_sub_query_str(self):
         self.sub_query_sql = ' and ts_code in ( select ts_code from  daily_basic where'
-        if (self.lineEdit_pe.text() == '')and(self.lineEdit_turnover_rate.text()==''):
+        if (self.lineEdit_pe.text() == '') and (self.lineEdit_turnover_rate.text() == ''):
             self.sub_query_sql = ''
         else:
             if 'where' == self.query_sql[
-                          len(self.query_sql) - 5:len(self.query_sql)]:  # 如果query_sql最后是‘where’注意没有空格,删除sub_query_sql前面的and
+                          len(self.query_sql) - 5:len(
+                              self.query_sql)]:  # 如果query_sql最后是‘where’注意没有空格,删除sub_query_sql前面的and
                 self.sub_query_sql = self.sub_query_sql.replace(' and', '')
 
             self._lineEdit_pe_changed()
             self._lineEdit_turnover_rate_changed()
 
     def _lineEdit_pe_changed(self):
-        # if 'daily_basic.pe' in self.query_sql:
-        #     # 首先删除query_sql中的有关vol数据
-        #     self.query_sql = self.query_sql.replace(self.sql_str_pe, '')
+        if 'daily_basic.pe' in self.query_sql:
+            # 首先删除query_sql中的有关vol数据
+            self.query_sql = self.query_sql.replace(self.sql_str_pe, '')
         if self.lineEdit_pe.text() != '':
             self.sql_str_pe = ''
             if 'where' != self.sub_query_sql[
-                          len(self.sub_query_sql) - 5:len(self.sub_query_sql)]:  # 如果sub_query_sql最后不是‘where’注意没有空格,前面多加一个and
-                self.sub_query_sql = self.sub_query_sql.rstrip(')')#先删除）括号
+                          len(self.sub_query_sql) - 5:len(
+                              self.sub_query_sql)]:  # 如果sub_query_sql最后不是‘where’注意没有空格,前面多加一个and
+                self.sub_query_sql = self.sub_query_sql.rstrip(')')  # 先删除）括号
                 self.sql_str_pe += ' and '
 
-
-            self.sql_str_pe += ' daily_basic.pe' + self.comboBox_pe.currentText() + self.lineEdit_pe.text()+')'
-            self.sub_query_sql +=self.sql_str_pe
+            self.sql_str_pe += ' daily_basic.pe' + self.comboBox_pe.currentText() + self.lineEdit_pe.text() + ')'
+            self.sub_query_sql += self.sql_str_pe
 
     def _lineEdit_turnover_rate_changed(self):
-        # if 'daily_basic.turnover_rate' in self.query_sql:
-        #     # 首先删除query_sql中的有关vol数据
-        #     self.query_sql = self.query_sql.replace(self.sql_str_turnover_rate, '')
+        if 'daily_basic.turnover_rate' in self.query_sql:
+            # 首先删除query_sql中的有关vol数据
+            self.query_sql = self.query_sql.replace(self.sql_str_turnover_rate, '')
         if self.lineEdit_turnover_rate.text() != '':
             self.sql_str_turnover_rate = ''
             if 'where' != self.sub_query_sql[
@@ -135,17 +140,63 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
                               self.sub_query_sql)]:  # 如果sub_query_sql最后不是‘where’注意没有空格,前面多加一个and
                 self.sub_query_sql = self.sub_query_sql.rstrip(')')  # 先删除）括号
                 self.sql_str_turnover_rate += ' and '
-            self.sql_str_turnover_rate += ' daily_basic.turnover_rate' + self.comboBox_turnover_rate.currentText() + self.lineEdit_turnover_rate.text()+')'
+            self.sql_str_turnover_rate += ' daily_basic.turnover_rate' + self.comboBox_turnover_rate.currentText() + self.lineEdit_turnover_rate.text() + ')'
             self.sub_query_sql += self.sql_str_turnover_rate
 
+    def _calendarWidget_clicked(self):
+        if 'trade_date' in self.query_sql:
+            # 首先删除query_sql中的有关trade_date数据
+            self.query_sql = self.query_sql.replace(self.sql_str_date, '')
+        select_date = self.calendarWidget.selectedDate().toString(Qt.ISODate).replace('-', '')  # 获取选中日期
+        self.sql_str_date = ''
+        if 'where' != self.query_sql[
+                      len(self.query_sql) - 5:len(self.query_sql)]:  # 如果query_sql最后不是‘where’注意没有空格,前面多加一个and
+            self.sql_str_date += ' and '
+        self.sql_str_date += ' daily.trade_date=\'' + select_date + '\''
+        self.query_sql += self.sql_str_date
+
+    def _pushButton_selectdate_clicked(self):
+        if 'trade_date' in self.query_sql:
+            # 删除query_sql中的有关trade_date数据
+            self.query_sql = self.query_sql.replace(self.sql_str_date, '')
+        self.textEdit_SQL.setPlainText(self.query_sql)
+
     def _pushButton_add_query_info_clicked(self):
-        self.query_sql = 'select * from daily where'#每次都初始化
+        self.query_sql = 'select * from daily where'  # 每次都初始化
         self._lineEdit_stock_code_name_changed()
         self._lineEidt_pct_chg_changed()
         self._lineEdit_vol_changed()
-
+        self._calendarWidget_clicked()
         self._set_sub_query_str()
-        self.textEdit_SQL.setText(self.query_sql+self.sub_query_sql)
+        self.query_sql += self.sub_query_sql
+        self.textEdit_SQL.setPlainText(self.query_sql)
+
+    def _get_daily_info(self):
+        sql = self.textEdit_SQL.toPlainText()
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
+        return df
+
+    def _pushButton_query_clicked(self):
+        if 'where' == self.query_sql[
+                      len(self.query_sql) - 5:len(self.query_sql)]:  # 如果query_sql最后是‘where’删除
+            self.query_sql = self.query_sql.replace('where', '')
+        self.textEdit_SQL.setPlainText(self.query_sql)
+        model = model_qtableview._setDailyModel(self._get_daily_info())
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有' + self.calendarWidget.selectedDate().toString(Qt.ISODate).replace('-', '') + '数据',
+                           dialog)
+            label.move(50, 50)
+            dialog.resize(400, 200)
+            dialog.setWindowTitle("提示")
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
