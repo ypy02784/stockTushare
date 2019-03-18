@@ -348,9 +348,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             dialog.exec_()
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    myWin = upsdownsWindow()
-    myWin.show()
-
-    app.exec_()
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     myWin = upsdownsWindow()
+#     myWin.show()
+#
+#     app.exec_()
