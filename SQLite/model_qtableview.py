@@ -240,3 +240,44 @@ def _setBlockTradeModel( df):
             tmp_data = df[i][j]
             model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
     return model
+
+# 设置个股资金流向信息model,参数为数据库查找返回数据集
+def _setmoneyflowModel(df):
+    """
+    个股交易信息信息Model
+    函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
+    """
+
+    row = len(df)
+    if row == 0: return 0
+    vol = len(df[0])
+
+    model = QtGui.QStandardItemModel()
+    model.setRowCount(row)
+    model.setColumnCount(vol)
+    model.setHorizontalHeaderItem(0, QtGui.QStandardItem('交易日期'))
+    model.setHorizontalHeaderItem(1, QtGui.QStandardItem('股票代码'))
+    model.setHorizontalHeaderItem(2, QtGui.QStandardItem('小单买入量（手）'))
+    model.setHorizontalHeaderItem(3, QtGui.QStandardItem('小单买入金额（万元）'))
+    model.setHorizontalHeaderItem(4, QtGui.QStandardItem('小单卖出量（手）'))
+    model.setHorizontalHeaderItem(5, QtGui.QStandardItem('小单卖出金额（万元）'))
+    model.setHorizontalHeaderItem(6, QtGui.QStandardItem('中单买入量（手）'))
+    model.setHorizontalHeaderItem(7, QtGui.QStandardItem('中单买入金额（万元）'))
+    model.setHorizontalHeaderItem(8, QtGui.QStandardItem('中单卖出量（手）'))
+    model.setHorizontalHeaderItem(9, QtGui.QStandardItem('中单卖出金额（万元）'))
+    model.setHorizontalHeaderItem(10, QtGui.QStandardItem('大单买入量（手）'))
+    model.setHorizontalHeaderItem(11, QtGui.QStandardItem('大单买入金额（万元）'))
+    model.setHorizontalHeaderItem(12, QtGui.QStandardItem('大单卖出量（手）'))
+    model.setHorizontalHeaderItem(13, QtGui.QStandardItem('大单卖出金额（万元）'))
+    model.setHorizontalHeaderItem(14, QtGui.QStandardItem('特大单买入量（手）'))
+    model.setHorizontalHeaderItem(15, QtGui.QStandardItem('特大单买入金额（万元）'))
+    model.setHorizontalHeaderItem(16, QtGui.QStandardItem('特大单卖出量（手）'))
+    model.setHorizontalHeaderItem(17, QtGui.QStandardItem('特大单卖出金额（万元）'))
+    model.setHorizontalHeaderItem(18, QtGui.QStandardItem('净流入量（手）'))
+    model.setHorizontalHeaderItem(19, QtGui.QStandardItem('净流入额（万元）'))
+
+    for i in range(row):
+        for j in range(vol):
+            tmp_data = df[i][j]
+            model.setItem(i, j, QtGui.QStandardItem(str(tmp_data)))
+    return model

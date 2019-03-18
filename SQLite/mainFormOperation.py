@@ -27,6 +27,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         self.pushToplistButton.clicked.connect(self.push_top_list_button_clicked)
         self.pushTopInstButton.clicked.connect(self.push_top_inst_button_clicked)
         self.pushBlockTradeButton.clicked.connect(self.push_block_trade_button_clicked)
+        self.pushButton_moneyflow.clicked.connect(self.push_button_moneyflow_clicked)
 
         self.calendarWidget.selectionChanged.connect(self.calendar_widget_selected)
         self.selectData = self.calendarWidget.selectedDate().toString(
@@ -140,6 +141,27 @@ class MyWindow(QMainWindow, Ui_MainWindow):
             # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
             dialog.setWindowModality(Qt.ApplicationModal)
             dialog.exec_()
+
+    def push_button_moneyflow_clicked(self):
+        model = model_qtableview._setmoneyflowModel(self._get_moneyflow_info(self.selectData))
+        if model != 0:
+            self.tableView.setModel(model)
+        else:  # TODO:弹出对话框说明无数据
+            dialog = QDialog()
+            label = QLabel('没有' + self.selectData + '个股资金流向数据数据', dialog)
+            label.move(50, 50)
+            dialog.resize(400, 200)
+            dialog.setWindowTitle("提示")
+            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+            dialog.setWindowModality(Qt.ApplicationModal)
+            dialog.exec_()
+
+    def _get_moneyflow_info(self, temDay=NOWTIME):
+        sql = 'select * from moneyflow where trade_date = ' + temDay + ' GROUP BY ts_code  '
+        connectSQLite.DBCur.execute(sql)
+        df = connectSQLite.DBCur.fetchall()
+        connectSQLite.DBCon.commit()
+        return df
 
     def _get_daily_info(self, temDay=NOWTIME):
         sql = 'select * from daily where trade_date = ' + temDay + ' GROUP BY ts_code  '

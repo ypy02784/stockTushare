@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1744</width>
-    <height>1484</height>
+    <width>597</width>
+    <height>609</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -458,13 +458,6 @@
                    </property>
                   </widget>
                  </item>
-                 <item>
-                  <widget class="QPushButton" name="pushButton_dateselect">
-                   <property name="text">
-                    <string>删除选中日期信息</string>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </widget>
               </item>
@@ -473,6 +466,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushButton_add_query_info">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="text">
               <string>创建查询</string>
              </property>
@@ -483,11 +479,11 @@
              <property name="title">
               <string>SQL语句</string>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_3">
-              <item>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="0" column="0" rowspan="2">
                <widget class="QTextEdit" name="textEdit_SQL"/>
               </item>
-              <item>
+              <item row="0" column="2">
                <widget class="QPushButton" name="pushButton_query">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -497,6 +493,13 @@
                 </property>
                 <property name="text">
                  <string>开始查询</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QPushButton" name="pushButton_dateselect">
+                <property name="text">
+                 <string>删除日期查询选项</string>
                 </property>
                </widget>
               </item>
@@ -612,7 +615,7 @@
                   </widget>
                  </item>
                  <item row="1" column="1">
-                  <widget class="QComboBox" name="comboBox_pct_change">
+                  <widget class="QComboBox" name="comboBox_top_pct_change">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -642,7 +645,7 @@
                  <item row="0" column="2">
                   <widget class="QLineEdit" name="lineEdit_top_code">
                    <property name="enabled">
-                    <bool>true</bool>
+                    <bool>false</bool>
                    </property>
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -651,7 +654,7 @@
                     </sizepolicy>
                    </property>
                    <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;请输入完整的股票代码或者股票名称&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;目前在龙虎榜处无意义，先保留&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                    <property name="readOnly">
                     <bool>false</bool>
@@ -687,7 +690,7 @@
                   </widget>
                  </item>
                  <item row="2" column="2">
-                  <widget class="QLineEdit" name="lineEdit_top__turnover_rate">
+                  <widget class="QLineEdit" name="lineEdit_top_turnover_rate">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -695,7 +698,7 @@
                     </sizepolicy>
                    </property>
                    <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;请输入完整的股票代码或者股票名称&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;输入换手率，必须为数字，一般为正&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                   </widget>
                  </item>
@@ -762,7 +765,7 @@
                   </widget>
                  </item>
                  <item row="1" column="2">
-                  <widget class="QLineEdit" name="lineEdit_pct_change">
+                  <widget class="QLineEdit" name="lineEdit_top_pct_change">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -783,12 +786,15 @@
                     </sizepolicy>
                    </property>
                    <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;请输入完整的股票代码或者股票名称&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;单位：元&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
                   <widget class="QComboBox" name="comboBox_top_code">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -852,7 +858,7 @@
                     </sizepolicy>
                    </property>
                    <property name="toolTip">
-                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;输入涨跌幅，可以正可以负&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;净买入额，单位为元&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                   </widget>
                  </item>
@@ -972,7 +978,7 @@
                   </widget>
                  </item>
                  <item row="5" column="2">
-                  <widget class="QLineEdit" name="lineEdit__top_amount_rate">
+                  <widget class="QLineEdit" name="lineEdit_top_amount_rate">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -997,7 +1003,7 @@
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_6">
                  <item>
-                  <widget class="QCalendarWidget" name="calendarWidget_2">
+                  <widget class="QCalendarWidget" name="calendarWidget_top">
                    <property name="gridVisible">
                     <bool>true</bool>
                    </property>
@@ -1015,13 +1021,6 @@
                    </property>
                   </widget>
                  </item>
-                 <item>
-                  <widget class="QPushButton" name="pushButton_top_dateselect">
-                   <property name="text">
-                    <string>删除选中日期信息</string>
-                   </property>
-                  </widget>
-                 </item>
                 </layout>
                </widget>
               </item>
@@ -1030,6 +1029,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushButton_add_top_query_info">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="text">
               <string>创建查询</string>
              </property>
@@ -1042,7 +1044,14 @@
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
-               <widget class="QTextEdit" name="textEdit_top_SQL"/>
+               <widget class="QTextEdit" name="textEdit_top_SQL">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QPushButton" name="pushButton_top_query">
@@ -1083,7 +1092,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>100</height>
+        <height>200</height>
        </size>
       </property>
      </widget>
