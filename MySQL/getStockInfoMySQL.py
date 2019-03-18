@@ -219,6 +219,31 @@ def _getMaxdateFromTable(tablename):
     except:
         return _STARTTIME
 
+#获取某天个股资金流向
+def _get_one_day_moneyflow_info(endtimetmp):
+    df = tspro.moneyflow(trade_date=endtimetmp)
+    if len(df.values) == 0: return  # 无数据则推出函数
+    try:
+        df.to_sql(connectMySQL.MONEYFLOW, connectMySQL.cn, index=False, if_exists='append')
+        print('插入' + str(endtimetmp) + '个股资金流向信息共%s条' % (len(df.values)))
+    except:
+        print('插入' + str(endtimetmp) + '个股资金流向信息失败,请检查数据库是否开启！')
+        return
+
+def get_all_moneyflow_info():
+    _STARTTIME = _getMaxdateFromTable(connectMySQL.MONEYFLOW)
+    if _STARTTIME >= _NOWTIME:
+        print('个股资金流向当前信息已是最新')
+        return
+
+    begin = _strTimeToTime(_STARTTIME)  # 转换成日期格式%Y-%m-%d
+    end = _strTimeToTime(_NOWTIME)
+    for i in range(1, (end - begin).days + 1):  # 按日期循环
+        day = begin + datetime.timedelta(days=i)
+        if (datetime.date.isoweekday(day) == 6) or (datetime.date.isoweekday(day) == 7): continue  # 周末数据不加载
+        day = str(day).replace('-', '')
+        _get_one_day_moneyflow_info(day)
+        # time.sleep(60/200)
 
 #更新所有股票数据
 def updateStockInfo():
@@ -230,6 +255,7 @@ def updateStockInfo():
     getAllTopListInfo()
     getAllTopInstInfo()
     getAllBlockTradeInfo()
+    get_all_moneyflow_info()
     return str('更新所有数据完毕')
    
 

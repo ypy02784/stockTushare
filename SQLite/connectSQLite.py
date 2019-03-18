@@ -11,6 +11,7 @@ COMPANYTABLE = 'stock_company'  #公司基本信息表名称
 TOPLISTTABLE = 'top_list' #龙虎榜
 TOPINSTTABLE = 'top_inst' #龙虎榜机构交易
 BLOCKTRADETABLE = 'block_trade'#大宗交易
+MONEYFLOW ='moneyflow'#个股资金流向
 
 
 #需要提前检查数据库stocktushare是否存在，不存在要执行初始化，否则退出，通过登录information_schema库检查

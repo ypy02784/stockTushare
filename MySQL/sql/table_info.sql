@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : mysql
+ Source Server         : local
  Source Server Type    : MySQL
  Source Server Version : 100136
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 100136
  File Encoding         : 65001
 
- Date: 05/03/2019 10:42:33
+ Date: 18/03/2019 21:25:50
 */
 
 SET NAMES utf8mb4;
@@ -124,5 +124,25 @@ INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'tableremark',
 INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'column', 'str', '列名');
 INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'type', 'str', '列类别');
 INSERT INTO `table_info` VALUES ('table_info', '数据表信息', 'remark', 'str', '列备注');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'ts_code', 'str', 'TS代码');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'trade_date', 'str', '交易日期');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'buy_sm_vol', 'int', '小单买入量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'buy_sm_amount', 'float', '小单买入金额（万元）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'sell_sm_vol', 'int', '小单卖出量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'sell_sm_amount', 'float', '小单卖出金额（万元）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'buy_md_vol', 'int', '中单买入量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'buy_md_amount', 'float', '中单买入金额（万元）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'sell_md_vol', 'int', '中单卖出量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'sell_md_amount', 'float', '中单卖出金额（万元）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'buy_lg_vol', 'int', '大单买入量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'buy_lg_amount', 'float', '大单买入金额（万元）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'sell_lg_vol', 'int', '大单卖出量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'sell_lg_amount', 'float', '大单卖出金额（万元）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'buy_elg_vol', 'int', '特大单买入量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'buy_elg_amount', 'float', '特大单买入金额（万元）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'sell_elg_vol', 'int', '特大单卖出量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'sell_elg_amount', 'float', '特大单卖出金额（万元）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'net_mf_vol', 'int', '净流入量（手）');
+INSERT INTO `table_info` VALUES ('moneyflow', '个股资金流向', 'net_mf_amount', 'float', '净流入额（万元）');
 
 SET FOREIGN_KEY_CHECKS = 1;
