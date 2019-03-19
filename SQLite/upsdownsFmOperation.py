@@ -39,6 +39,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         self.checkBox_daily_date_select.stateChanged.connect(self._pushButton_add_query_info_clicked)
         # 龙虎榜查询界面自动更新查询语句
         self.calendarWidget_top.selectionChanged.connect(self._pushButton_add_top_query_info_clicked)
+        self.lineEdit_top_code.textChanged.connect(self._pushButton_add_top_query_info_clicked)
         self.lineEdit_top_pct_change.textChanged.connect(self._pushButton_add_top_query_info_clicked)
         self.lineEdit_top_net_amount.textChanged.connect(self._pushButton_add_top_query_info_clicked)
         self.lineEdit_top_l_amount.textChanged.connect(self._pushButton_add_top_query_info_clicked)
@@ -206,13 +207,27 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             return
         model = model_qtableview._setDailyModel(self._get_data_info(self.textEdit_SQL.toPlainText()))
         if model != 0:
-            self.tableView.setModel(model)
+            self.tableView_daily.setModel(model)
+            self.tableView_daily.resizeColumnsToContents()
             self.showmodel = model
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog(
                 '没有' + self.calendarWidget.selectedDate().toString(Qt.ISODate).replace('-', '') + '数据')
 
     # 龙虎榜查询
+    def _lineEdit_top_code_changed(self):
+        tmpsql = ''
+        if self.lineEdit_top_code.text() != '':
+            if 'where' != self.top_query_sql[
+                          len(self.top_query_sql) - 5:len(
+                              self.top_query_sql)]:  # 如果top_query_sql最后不是‘where’注意没有空格,前面多加一个and
+                tmpsql += ' and '
+            tmpsql += ' ts_code=\'' + self.lineEdit_top_code.text() + '\''
+        self.sql_top_code = tmpsql  # 先设置一下，按目前思路不需要
+        return tmpsql
+
+
+
     def _lineEdit_top_pct_chg_changed(self):
         tmpsql = ''
         if self.lineEdit_top_pct_change.text() != '':
@@ -281,6 +296,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
 
     def _pushButton_add_top_query_info_clicked(self):
         self.top_query_sql = 'select * from top_list where'  # 每次都初始化
+        self.top_query_sql += self._lineEdit_top_code_changed()
         self.top_query_sql += self._lineEdit_top_pct_chg_changed()
         self.top_query_sql += self._lineEdit_top_turnover_rate_changed()
         self.top_query_sql += self._lineEdit_top_l_amount_changed()
@@ -295,7 +311,8 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             return
         model = model_qtableview._setToplistModel(self._get_data_info(self.textEdit_top_SQL.toPlainText()))
         if model != 0:
-            self.tableView.setModel(model)
+            self.tableView_top.setModel(model)
+            self.tableView_top.resizeColumnsToContents()
             self.showmodel = model
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有龙虎榜数据')
@@ -323,8 +340,8 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             return
         model = model_qtableview._setmoneyflowModel(self._get_data_info(self.textEdit_moneyflow_SQL.toPlainText()))
         if model != 0:
-            self.tableView.setModel(model)
-            self.tableView.resizeColumnsToContents()
+            self.tableView_moneyflow.setModel(model)
+            self.tableView_moneyflow.resizeColumnsToContents()
             self.showmodel = model
             self._checkBox_high_light_net_positive_clicked()
         else:  # TODO:弹出对话框说明无数据

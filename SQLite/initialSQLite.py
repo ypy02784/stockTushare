@@ -16,9 +16,9 @@ def _create_sq_lite_table():
             return
 
         try:
-            f = open('.\\sqlite\\' + file , 'r', encoding='utf-8')
+            f = open('.\\sql\\' + file , 'r', encoding='utf-8')
         except:
-            print('文件打开失败，请检查' + file + '.sql文件是否在sql文件夹中')
+            print('文件打开失败，请检查' + file + '文件是否在sql文件夹中')
             return 
     
         sql = ''
@@ -30,8 +30,8 @@ def _create_sq_lite_table():
                     continue  #如果遇到注释符，跳过
                 elif each_line[len(each_line) - 2] == ';':  #如果读到句末是‘；’则执行一条语句，最后是换行符\n，所以减2
                     sql += each_line[0:len(each_line) - 1]
-                    connectSQLite.sqliteCur.execute(sql)
-                    connectSQLite.sqliteCon.commit()
+                    connectSQLite.DBCur.execute(sql)
+                    connectSQLite.DBCon.commit()
                     sql = ''
                 else:
                     sql += each_line[0:len(each_line) - 1]
@@ -59,6 +59,6 @@ def initial_db():
     _create_sq_lite_table()
     print('数据库初始化完成！！！')
 
-
+initial_db()
 #只需调用initialDB函数即可完成数据库初始化
 
