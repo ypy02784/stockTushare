@@ -31,14 +31,14 @@ def update_stockbasic_to_db():
         # print('获取网络数据失败，请检查网络是否连接')
         return '获取网络数据失败，请检查网络是否连接'
 
-    if len(stock_basic.values) == 0: return  '无股票基本信息'# 无数据则推出函数
+    if len(stock_basic.values) == 0: return '无股票基本信息'  # 无数据则推出函数
     try:
         if not (_delete_table_info(connectSQLite.STOCKBAISCTABLE)):
             return '删除股票基本信息表信息失败'  # 删除表中数据失败则退出函数，避免重复数据
         stock_basic.to_sql(
             connectSQLite.STOCKBAISCTABLE, connectSQLite.cn, index=False, if_exists='append')
         # print('更新股票基本信息表成功，目前上市股票有%s个股' % (len(stock_basic.values)))
-        return '更新股票基本信息表成功，目前上市股票有%s个股' % (len(stock_basic.values))
+        return '更新股票基本信息表成功，目前交易股票有%s个股' % (len(stock_basic.values))
     except:
         # print('更新股票基本信息表失败，请检查数据库后重新更新')
         return '更新股票基本信息表失败，请检查数据库后重新更新'
@@ -192,7 +192,7 @@ def _get_one_day_block_trade_info(daytime):
         df = tspro.block_trade(trade_date=daytime)
     except:
         return ('获取网络数据失败，请检查网络是否连接')
-    if len(df.values) == 0: return daytime + '数据暂未更新'  # 无数据则推出函数
+    if len(df.values) == 0: return daytime + '大宗交易数据暂未更新'  # 无数据则推出函数
     try:
         df.to_sql(connectSQLite.BLOCKTRADETABLE, connectSQLite.cn, index=False, if_exists='append')
         return ('插入' + str(daytime) + '大宗交易共%s条' % (len(df.values)))
@@ -226,7 +226,7 @@ def _get_one_day_stock_daily_basic_info(endtimetmp):
         return ('获取网络数据失败，请检查网络是否连接')
 
     if len(df.values) == 0:
-        return endtimetmp + '数据暂未更新'  # 无数据则推出函数
+        return endtimetmp + '每日指标信息数据暂未更新'  # 无数据则推出函数
     try:
         df.to_sql(connectSQLite.DAILYBASICTABLE, connectSQLite.cn, index=False, if_exists='append')
         return ('插入' + str(endtimetmp) + '每日指标信息共%s条' % (len(df.values)))
@@ -280,7 +280,7 @@ def get_all_moneyflow_info():
         day = begin + datetime.timedelta(days=i)
         if (datetime.date.isoweekday(day) == 6) or (datetime.date.isoweekday(day) == 7): continue  # 周末数据不加载
         day = str(day).replace('-', '')
-        labelstr += _get_one_day_moneyflow_info(day)+'\n'
+        labelstr += _get_one_day_moneyflow_info(day) + '\n'
         # time.sleep(60/200)
     return labelstr
 
@@ -308,14 +308,14 @@ def _get_maxdate_from_table(tablename):
 
 # 更新所有股票数据
 def update_stock_info():
-    update_stockbasic_to_db()  # 股票基本信息
-    update_company_info_to_db()  # 公司信息
-    get_all_stock_daily_info()  # 日交易信息
-    get_all_stock_daily_basic_info()  # 日交易指标
-    get_all_top_list_info()
-    get_all_top_inst_info()
-    get_all_block_trade_info()
-    get_all_moneyflow_info()
-    return '更新所有数据完毕'
+    tmp = update_stockbasic_to_db() +'\n' # 股票基本信息
+    tmp += update_company_info_to_db() + '\n'  # 公司信息
+    tmp += get_all_stock_daily_info() + '\n'  # 日交易信息
+    tmp += get_all_stock_daily_basic_info() + '\n'  # 日交易指标
+    tmp += get_all_top_list_info() + '\n'
+    tmp += get_all_top_inst_info() + '\n'
+    tmp += get_all_block_trade_info() + '\n'
+    tmp += get_all_moneyflow_info() + '\n'
+    return tmp + '更新所有数据完毕'
 
 # update_stock_info()

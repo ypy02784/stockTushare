@@ -1,6 +1,10 @@
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QLabel
 import sys
+
+from PyQt5.QtWidgets import QMenu
+
 from SQLite import connectSQLite, model_qtableview
 
 from UI.upsdownsFm import *
@@ -44,6 +48,10 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         self.comboBox_top_net_amount.activated.connect(self._pushButton_add_top_query_info_clicked)
         self.comboBox_top_l_amount.activated.connect(self._pushButton_add_top_query_info_clicked)
         self.comboBox_top_pct_change.activated.connect(self._pushButton_add_top_query_info_clicked)
+
+        #申明tableview的右键菜单功能
+        self.tableView.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.tableView.customContextMenuRequested.connect(self.showContextMenu)
 
     stocknamelist = []  # 记录股票名称信息
     stockcodelist = []  # 记录股票代码信息
@@ -348,10 +356,23 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         dialog.setWindowModality(Qt.ApplicationModal)
         dialog.exec_()
 
+#实现tableview右键菜单功能
+    def showContextMenu(self):  # 创建右键菜单
+        self.tableView.contextMenu = QMenu(self)
+        self.actionA = self.tableView.contextMenu.addAction(u'动作a')
+        # self.actionA = self.view.contextMenu.exec_(self.mapToGlobal(pos))  # 1
+        self.tableView.contextMenu.popup(QCursor.pos())  # 2菜单显示的位置
+        self.actionA.triggered.connect(self.actionHandler)
+        # self.view.contextMenu.move(self.pos())  # 3
+        self.tableView.contextMenu.show()
 
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     myWin = upsdownsWindow()
-#     myWin.show()
-#
-#     app.exec_()
+    def actionHandler(self):
+        self._show_message_dialog('测试成功')
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    myWin = upsdownsWindow()
+    myWin.show()
+
+    app.exec_()

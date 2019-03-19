@@ -530,7 +530,7 @@ class Ui_UpsAndDownsWindow(object):
         UpsAndDownsWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(UpsAndDownsWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.comboBox_pct_chg.setCurrentIndex(-1)
         self.comboBox_vol.setCurrentIndex(-1)
         self.comboBox_code.setCurrentIndex(-1)
