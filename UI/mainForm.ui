@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>613</width>
-    <height>387</height>
+    <width>1000</width>
+    <height>1205</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -125,22 +125,92 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>613</width>
-     <height>18</height>
+     <width>1000</width>
+     <height>45</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_analysis">
+   <widget class="QMenu" name="menu_query">
     <property name="title">
-     <string>分析</string>
+     <string>具体查询</string>
     </property>
     <addaction name="action_ups_and_downs"/>
    </widget>
-   <addaction name="menu_analysis"/>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>数据更新</string>
+    </property>
+    <addaction name="action_update_daily_info"/>
+    <addaction name="action_update_daily_basic_info"/>
+    <addaction name="action_update_top_list_info"/>
+    <addaction name="action_update_top_inst_info"/>
+    <addaction name="action_update_block_trade_info"/>
+    <addaction name="action_update_moneyflow_info"/>
+    <addaction name="action_update_stock_basic_info"/>
+    <addaction name="action_update_company_info"/>
+    <addaction name="separator"/>
+    <addaction name="action_update_all_info"/>
+   </widget>
+   <addaction name="menu_query"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action_ups_and_downs">
    <property name="text">
-    <string>涨跌分析</string>
+    <string>涨跌查询</string>
+   </property>
+   <property name="toolTip">
+    <string>涨跌查询</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="action_update_daily_info">
+   <property name="text">
+    <string>更新每日交易信息</string>
+   </property>
+  </action>
+  <action name="action_update_daily_basic_info">
+   <property name="text">
+    <string>更新每日指标信息</string>
+   </property>
+  </action>
+  <action name="action_update_top_list_info">
+   <property name="text">
+    <string>更新龙虎榜信息</string>
+   </property>
+  </action>
+  <action name="action_update_top_inst_info">
+   <property name="text">
+    <string>更新龙虎榜机构信息</string>
+   </property>
+  </action>
+  <action name="action_update_block_trade_info">
+   <property name="text">
+    <string>更新大宗交易信息</string>
+   </property>
+  </action>
+  <action name="action_update_moneyflow_info">
+   <property name="text">
+    <string>更新个股资金流向信息</string>
+   </property>
+  </action>
+  <action name="action_update_all_info">
+   <property name="text">
+    <string>更新所有信息</string>
+   </property>
+   <property name="toolTip">
+    <string>更新所有信息</string>
+   </property>
+  </action>
+  <action name="action_update_stock_basic_info">
+   <property name="text">
+    <string>更新股票基本信息</string>
+   </property>
+  </action>
+  <action name="action_update_company_info">
+   <property name="text">
+    <string>更新上市公司信息</string>
    </property>
   </action>
  </widget>

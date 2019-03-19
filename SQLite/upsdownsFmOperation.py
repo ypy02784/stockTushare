@@ -19,6 +19,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         self.pushButton_query.clicked.connect(self._pushButton_query_clicked)
         self.pushButton_add_top_query_info.clicked.connect(self._pushButton_add_top_query_info_clicked)
         self.pushButton_top_query.clicked.connect(self.pushButton_top_query_clicked)
+        self.tabWidget.setCurrentIndex(0)
         # daily查询界面自动更新查询语句
         self.calendarWidget.selectionChanged.connect(self._pushButton_add_query_info_clicked)
         self.lineEdit_pct_chg.textChanged.connect(self._pushButton_add_query_info_clicked)
@@ -66,6 +67,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
     sql_top_amount_rate = ''  # 龙虎榜成交占比
     sql_top_date = ''
     top_query_sql: str = 'select * from top_list where'
+    sql_order_by_trade_date =  ' order by trade_date desc'
 
     # 初始化comboBox和comboBox_top_code选项信息
     def _init_combobox_code(self):
@@ -201,12 +203,15 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         if 'trade_date' in self.daily_query_sql:
             # 删除query_sql中的有关trade_date数据
             self.daily_query_sql = self.daily_query_sql.replace(self.sql_str_date, '')
+        if self.sql_order_by_trade_date in self.daily_query_sql:
+            # 删除query_sql中的有关orderby的数据
+            self.daily_query_sql = self.daily_query_sql.replace(self.sql_order_by_trade_date, '')
         # 删除时间信息后如果最后为where，则继续删除where
         if 'where' == self.daily_query_sql[
                       len(self.daily_query_sql) - 5:len(
-                          self.daily_query_sql)]:  # 如果query_sql最后不是‘where’注意没有空格,前面多加一个and
+                          self.daily_query_sql)]:  # 如果query_sql最后是‘where’删除
             self.daily_query_sql = self.daily_query_sql.replace('where', '')
-        self.textEdit_SQL.setPlainText(self.daily_query_sql)
+        self.textEdit_SQL.setPlainText(self.daily_query_sql + self.sql_order_by_trade_date)
 
     def _pushButton_add_query_info_clicked(self):
         self.daily_query_sql = 'select * from daily where'  # 每次都初始化
@@ -215,31 +220,19 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         self.daily_query_sql += self._lineEdit_vol_changed()
         self.daily_query_sql += self._set_sub_query_str()
         self.daily_query_sql += self._calendarWidget_clicked()
+        self.daily_query_sql += ' order by trade_date desc'
         self.textEdit_SQL.setPlainText(self.daily_query_sql)
-
-    def _get_daily_info(self, sql):
-        connectSQLite.DBCur.execute(sql)
-        df = connectSQLite.DBCur.fetchall()
-        connectSQLite.DBCon.commit()
-        return df
 
     def _pushButton_query_clicked(self):
         sql = self.textEdit_SQL.toPlainText()
         if sql == '':
             return
-        model = model_qtableview._setDailyModel(self._get_daily_info(self.textEdit_SQL.toPlainText()))
+        model = model_qtableview._setDailyModel(self._get_data_info(self.textEdit_SQL.toPlainText()))
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
-            dialog = QDialog()
-            label = QLabel('没有' + self.calendarWidget.selectedDate().toString(Qt.ISODate).replace('-', '') + '数据',
-                           dialog)
-            label.move(50, 50)
-            dialog.resize(400, 200)
-            dialog.setWindowTitle("提示")
-            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
-            dialog.setWindowModality(Qt.ApplicationModal)
-            dialog.exec_()
+            self._show_message_dialog('没有' + self.calendarWidget.selectedDate().toString(Qt.ISODate).replace('-', '') + '数据')
+
 
     # 内容变更后返回查询语句
     def _lineEdit_top_pct_chg_changed(self):
@@ -323,29 +316,37 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         self.top_query_sql += self._calendarWidget_top_changed()
         self.textEdit_top_SQL.setText(self.top_query_sql)
 
-    def _get_toplist_info(self, sql):
-        connectSQLite.DBCur.execute(sql)
-        df = connectSQLite.DBCur.fetchall()
-        connectSQLite.DBCon.commit()
+    def _get_data_info(self, sql):
+        try:
+           connectSQLite.DBCur.execute(sql)
+           df = connectSQLite.DBCur.fetchall()
+           connectSQLite.DBCon.commit()
+        except:
+            df = None
         return df
 
     def pushButton_top_query_clicked(self):
         sql = self.textEdit_top_SQL.toPlainText()
         if sql == '':
             return
-        model = model_qtableview._setToplistModel(self._get_toplist_info(self.textEdit_top_SQL.toPlainText()))
+        model = model_qtableview._setToplistModel(self._get_data_info(self.textEdit_top_SQL.toPlainText()))
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
-            dialog = QDialog()
-            datestr = self.calendarWidget.selectedDate().toString(Qt.ISODate).replace('-', '')
-            label = QLabel('没有' + datestr + '龙虎榜数据', dialog)
-            label.move(50, 50)
-            dialog.resize(400, 200)
-            dialog.setWindowTitle("提示")
-            # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
-            dialog.setWindowModality(Qt.ApplicationModal)
-            dialog.exec_()
+            self._show_message_dialog('没有龙虎榜数据')
+
+    @staticmethod
+    def _show_message_dialog(message='没有信息'):
+        dialog = QDialog()
+        label = QLabel(message, dialog)
+        label.adjustSize()  # label自动根据内容变更大小
+        label.setWordWrap(True)  # 设置自动换行
+        label.move(50, 50)
+        dialog.resize(label.size().width() + 200, label.size().height() + 200)
+        dialog.setWindowTitle("提示")
+        # 设置窗口的属性为ApplicationModal模态，用户只有关闭弹窗后，才能关闭主界面
+        dialog.setWindowModality(Qt.ApplicationModal)
+        dialog.exec_()
 
 
 # if __name__ == '__main__':

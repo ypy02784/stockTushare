@@ -7,7 +7,7 @@ def _setDailyModel( df):
     股票交易信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
     """
-
+    if not df: return 0  # 判断df是否为空，空返回0
     row = len(df)
     if row == 0: return 0
     vol = len(df[0])
@@ -40,7 +40,7 @@ def _setDailyBasickModel( df):
     股票指标信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
     """
-
+    if not df: return 0  # 判断df是否为空，空返回0
     row = len(df)
     if row == 0: return 0
     vol = len(df[0])
@@ -78,7 +78,7 @@ def _setStockBasickModel( df):
     股票基本信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
     """
-
+    if not df: return 0  # 判断df是否为空，空返回0
     row = len(df)
     if row == 0: return 0
     vol = len(df[0])
@@ -114,7 +114,7 @@ def _setCompanyModel( df):
     公司信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
     """
-
+    if not df: return 0  # 判断df是否为空，空返回0
     row = len(df)
     if row == 0: return 0
     vol = len(df[0])
@@ -152,7 +152,7 @@ def _setToplistModel( df):
     股票交易信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
     """
-
+    if not df: return 0#判断df是否为空，空返回0
     row = len(df)
     if row == 0: return 0
     vol = len(df[0])
@@ -189,7 +189,7 @@ def _setTopInstModel( df):
     股票交易信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
     """
-
+    if not df: return 0  # 判断df是否为空，空返回0
     row = len(df)
     if row == 0: return 0
     vol = len(df[0])
@@ -219,7 +219,7 @@ def _setBlockTradeModel( df):
     股票交易信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
     """
-
+    if not df: return 0  # 判断df是否为空，空返回0
     row = len(df)
     if row == 0: return 0
     vol = len(df[0])
@@ -247,7 +247,7 @@ def _setmoneyflowModel(df):
     个股交易信息信息Model
     函数用以设置和tableview绑定的model，当传入的数据库返回数据为0时，返回0，当df有数据时，返回model
     """
-
+    if not df: return 0  # 判断df是否为空，空返回0
     row = len(df)
     if row == 0: return 0
     vol = len(df[0])
