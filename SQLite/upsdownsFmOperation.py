@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QCursor,QColor
+from PyQt5.QtGui import QCursor, QColor
 from PyQt5.QtWidgets import QMainWindow, QApplication, QDialog, QLabel
 import sys
 
@@ -50,7 +50,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         self.comboBox_top_net_amount.activated.connect(self._pushButton_add_top_query_info_clicked)
         self.comboBox_top_l_amount.activated.connect(self._pushButton_add_top_query_info_clicked)
         self.comboBox_top_pct_change.activated.connect(self._pushButton_add_top_query_info_clicked)
-        #资金流自动更新查询语句
+        # 资金流自动更新查询语句
         self.pushButton_add_moneyflow_query.clicked.connect(self._pushButton_add_moneyflow_query_clicked)
         self.lineEdit_moneyflow_code.textChanged.connect(self._pushButton_add_moneyflow_query_clicked)
         self.checkBox_moneyflow_date_select.stateChanged.connect(self._pushButton_add_moneyflow_query_clicked)
@@ -65,7 +65,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
     # 类内变量
     stocknamelist = []  # 记录股票名称信息
     stockcodelist = []  # 记录股票代码信息
-    showmodel: QtGui.QStandardItemModel = None  #记录当前tableview中的model
+    top_model: QtGui.QStandardItemModel = None  # 记录当前tableview中的mode
+    daily_model: QtGui.QStandardItemModel = None  # 记录当前tableview中的model
+    moneyflow_model: QtGui.QStandardItemModel = None  # 记录当前tableview中的model
 
     sql_str_code = ''  # 用来记录添加到query的code语句，方便修改删除，下面几个变量作用相同
     sql_str_pe = ''
@@ -209,7 +211,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         if model != 0:
             self.tableView_daily.setModel(model)
             self.tableView_daily.resizeColumnsToContents()
-            self.showmodel = model
+            self.daily_model = model
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog(
                 '没有' + self.calendarWidget.selectedDate().toString(Qt.ISODate).replace('-', '') + '数据')
@@ -225,8 +227,6 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             tmpsql += ' ts_code=\'' + self.lineEdit_top_code.text() + '\''
         self.sql_top_code = tmpsql  # 先设置一下，按目前思路不需要
         return tmpsql
-
-
 
     def _lineEdit_top_pct_chg_changed(self):
         tmpsql = ''
@@ -313,7 +313,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         if model != 0:
             self.tableView_top.setModel(model)
             self.tableView_top.resizeColumnsToContents()
-            self.showmodel = model
+            self.top_model = model
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有龙虎榜数据')
 
@@ -342,29 +342,31 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         if model != 0:
             self.tableView_moneyflow.setModel(model)
             self.tableView_moneyflow.resizeColumnsToContents()
-            self.showmodel = model
+            self.moneyflow_model = model
             self._checkBox_high_light_net_positive_clicked()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有资金流向数据')
 
     def _checkBox_high_light_net_positive_clicked(self):
         if self.checkBox_high_light_net_positive.isChecked():
-            if self.showmodel is None:
+            if self.moneyflow_model is None:
                 return
-            row = self.showmodel.rowCount()
-            vol = self.showmodel.columnCount()
-            #moneyflow的列有20个,特大单卖出额，买入额分别17，15，大单卖出额，买入额为13，11
-            if vol==20:
-                for i in range(row):
-                    if float(self.showmodel.item(i,11).text()) > float(self.showmodel.item(i,13).text()):
-                        self.showmodel.item(i,11).setBackground(QColor(255,0,0))
-                    if float(self.showmodel.item(i, 15).text()) > float(self.showmodel.item(i, 17).text()):
-                        self.showmodel.item(i, 15).setBackground(QColor(255, 0, 0))
+            model = self.moneyflow_model
+            row = model.rowCount()
+            vol = model.columnCount()
+            # moneyflow的列有20个,特大单卖出额，买入额分别17，15，大单卖出额，买入额为13，11
 
+            for i in range(row):
+                if float(model.item(i, 11).text()) > float(model.item(i, 13).text()):
+                    model.item(i, 11).setBackground(QColor(255, 0, 0))
+
+                if float(model.item(i, 15).text()) > float(model.item(i, 17).text()):
+                    model.item(i, 15).setBackground(QColor(255, 0, 0))
 
     """
     公共函数
     """
+
     # 初始化comboBox和comboBox_top_code选项信息
     def _init_combobox_code(self):
         sql = 'select * from stock_basic '

@@ -260,7 +260,7 @@ def _get_one_day_moneyflow_info(endtimetmp):
         return ('获取网络数据失败，请检查网络是否连接')
 
     if len(df.values) == 0:
-        return endtimetmp + '数据暂未更新'  # 无数据则推出函数
+        return endtimetmp + '个股资金流向数据暂未更新'  # 无数据则推出函数
     try:
         df.to_sql(connectSQLite.MONEYFLOW, connectSQLite.cn, index=False, if_exists='append')
         return ('插入' + str(endtimetmp) + '个股资金流向信息共%s条' % (len(df.values)))
@@ -310,11 +310,11 @@ def _get_maxdate_from_table(tablename):
 def update_stock_info():
     tmp = update_stockbasic_to_db() +'\n' # 股票基本信息
     tmp += update_company_info_to_db() + '\n'  # 公司信息
-    tmp += get_all_stock_daily_info() + '\n'  # 日交易信息
-    tmp += get_all_stock_daily_basic_info() + '\n'  # 日交易指标
-    tmp += get_all_top_list_info() + '\n'
-    tmp += get_all_top_inst_info() + '\n'
-    tmp += get_all_block_trade_info() + '\n'
+    tmp += get_all_stock_daily_info() # 日交易信息
+    tmp += get_all_stock_daily_basic_info()   # 日交易指标
+    tmp += get_all_top_list_info()
+    tmp += get_all_top_inst_info()
+    tmp += get_all_block_trade_info()
     tmp += get_all_moneyflow_info() + '\n'
     return tmp + '更新所有数据完毕'
 
