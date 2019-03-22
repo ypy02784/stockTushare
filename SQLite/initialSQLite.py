@@ -5,6 +5,8 @@ import os
 import sqlite3
 from SQLite.global_variable import DB_TABLE_LIST
 
+# DB_PATH = 'D:\stockTushare.db'  #数据库文件路径及名称
+DB_PATH = 'stockTushare.db'  #相对地址数据库文件名称
 
 def _create_sq_lite_table(DBCur):
     # 默认从sql文件夹中读取文件，sql文件必须用utf-8无bom方式保存，否则会出现语法错误，特别是有中文字符的是否，
@@ -68,7 +70,7 @@ def _get_file_name(file_dir):  # 查找sqlite文件下sql文件名，并返回li
 # 初始化数据库，
 def initial_db():
     # connect函数连接数据库，数据库存在则连接，不存在则创建一个数据库
-    DBCon = sqlite3.connect("stockTushare.db")
+    DBCon = sqlite3.connect(DB_PATH)
     DBCur = DBCon.cursor()  # TODO:需要确认一下，是否是可以打开一个占用数据库，还是每次都要打开然后关闭
     _create_sq_lite_table(DBCur)
     DBCur.close()

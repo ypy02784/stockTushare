@@ -14,7 +14,6 @@ from SQLite.upsdownsFmOperation import upsdownsWindow
 from SQLite import getStockInfoSQLite
 
 
-
 class MyWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyWindow, self).__init__(parent)
@@ -81,57 +80,74 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         return sql
 
     def push_daily_button_clicked(self):
-        model = model_qtableview._setDailyModel(self._get_daily_info())
+        # model = model_qtableview._setDailyModel(self._get_daily_info())
+        df, description = self._get_daily_info()
+        model = model_qtableview.setModel(df, description)
+
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '交易数据')
 
     def push_daily_basic_button_clicked(self):
-        model = model_qtableview._setDailyBasickModel(
-            self._get_daily_basic_info())
+        # model = model_qtableview._setDailyBasickModel(self._get_daily_basic_info())
+        df, description = self._get_daily_basic_info()
+        model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '交易指标数据')
 
     def push_stock_basic_button_clicked(self):
-        model = model_qtableview._setStockBasickModel(self._get_stock_basic_info())
+        # model = model_qtableview._setStockBasickModel(self._get_stock_basic_info())
+        df, description = self._get_stock_basic_info()
+        model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有股票基本信息数据')
 
     def push_company_button_clicked(self):
-        model = model_qtableview._setCompanyModel(self._get_company_info())
+        # model = model_qtableview._setCompanyModel(self._get_company_info())
+        df, description = self._get_company_info()
+        model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有公司基本信息数据')
 
     def push_top_list_button_clicked(self):
-        model = model_qtableview._setToplistModel(self._get_top_list_info())
+        # model = model_qtableview._setToplistModel(self._get_top_list_info())
+        df, description = self._get_top_list_info()
+        model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '龙虎榜数据数据')
 
     def push_top_inst_button_clicked(self):
-        model = model_qtableview._setTopInstModel(self._get_top_inst_info())
+        # model = model_qtableview._setTopInstModel(self._get_top_inst_info())
+        df, description = self._get_top_inst_info()
+        model = model_qtableview.setModel(df, description)
+
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '龙虎榜机构交易数据数据')
 
     def push_block_trade_button_clicked(self):
-        model = model_qtableview._setBlockTradeModel(self._get_block_trade_info())
+        # model = model_qtableview._setBlockTradeModel(self._get_block_trade_info())
+        df, description = self._get_block_trade_info()
+        model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '大宗交易数据数据')
 
     def push_button_moneyflow_clicked(self):
-        model = model_qtableview._setmoneyflowModel(self._get_moneyflow_info())
+        # model = model_qtableview._setmoneyflowModel(self._get_moneyflow_info())
+        df, description = self._get_moneyflow_info()
+        model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
         else:  # TODO:弹出对话框说明无数据
@@ -139,44 +155,45 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
     def _get_moneyflow_info(self):
         sql = 'select * from moneyflow  ' + self.add_query_code_sql() + ' order BY ts_code  asc'
-        return self._get_date_info(sql)
+        return self._get_data_info(sql)
 
     def _get_daily_info(self):
         sql = 'select * from daily ' + self.add_query_code_sql() + ' order BY ts_code  asc'
-        return self._get_date_info(sql)
+        return self._get_data_info(sql)
 
     def _get_daily_basic_info(self):
         sql = 'select * from daily_basic ' + self.add_query_code_sql() + ' order BY ts_code  asc'
-        return self._get_date_info(sql)
+        return self._get_data_info(sql)
 
     def _get_stock_basic_info(self):
         sql = 'select * from stock_basic '
-        return self._get_date_info(sql)
+        return self._get_data_info(sql)
 
     def _get_company_info(self):
         sql = 'select * from stock_company '
-        return self._get_date_info(sql)
+        return self._get_data_info(sql)
 
     def _get_top_list_info(self):
         sql = 'select * from top_list ' + self.add_query_code_sql() + ' order BY ts_code  asc'
-        return self._get_date_info(sql)
+        return self._get_data_info(sql)
 
     def _get_top_inst_info(self):
         sql = 'select * from top_inst ' + self.add_query_code_sql() + ' order BY ts_code  asc'
-        return self._get_date_info(sql)
+        return self._get_data_info(sql)
 
     def _get_block_trade_info(self):
         sql = 'select * from block_trade ' + self.add_query_code_sql() + ' order BY ts_code  asc'
-        return self._get_date_info(sql)
+        return self._get_data_info(sql)
 
-    def _get_date_info(self, sql):
+    def _get_data_info(self, sql):
         try:
-            connectSQLite.DBCur.execute(sql)
+            description = connectSQLite.DBCur.execute(sql).description
             df = connectSQLite.DBCur.fetchall()
             connectSQLite.DBCon.commit()
         except:
             df = None
-        return df
+            description = None
+        return df, description
 
     def _upsdowns_show(self):
         self.upsdownsFm = upsdownsWindow()

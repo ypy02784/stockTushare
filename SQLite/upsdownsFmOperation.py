@@ -207,7 +207,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         sql = self.textEdit_SQL.toPlainText()
         if sql == '':
             return
-        model = model_qtableview._setDailyModel(self._get_data_info(self.textEdit_SQL.toPlainText()))
+        # model = model_qtableview._setDailyModel(self._get_data_info(self.textEdit_SQL.toPlainText()))
+        df, description = self._get_data_info(self.textEdit_SQL.toPlainText())
+        model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView_daily.setModel(model)
             self.tableView_daily.resizeColumnsToContents()
@@ -309,7 +311,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         sql = self.textEdit_top_SQL.toPlainText()
         if sql == '':
             return
-        model = model_qtableview._setToplistModel(self._get_data_info(self.textEdit_top_SQL.toPlainText()))
+        # model = model_qtableview._setToplistModel(self._get_data_info(self.textEdit_top_SQL.toPlainText()))
+        df, description = self._get_data_info(self.textEdit_top_SQL.toPlainText())
+        model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView_top.setModel(model)
             self.tableView_top.resizeColumnsToContents()
@@ -338,8 +342,11 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         sql = self.textEdit_moneyflow_SQL.toPlainText()
         if sql == '':
             return
-        model = model_qtableview._setmoneyflowModel(self._get_data_info(self.textEdit_moneyflow_SQL.toPlainText()))
+        # model = model_qtableview._setmoneyflowModel(self._get_data_info(self.textEdit_moneyflow_SQL.toPlainText()))
+        df, description = self._get_data_info(self.textEdit_moneyflow_SQL.toPlainText())
+        model = model_qtableview.setModel(df, description)
         if model != 0:
+
             self.tableView_moneyflow.setModel(model)
             self.tableView_moneyflow.resizeColumnsToContents()
             self.moneyflow_model = model
@@ -413,15 +420,15 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
     def _on_combobox_moneyflow_code_activate(self, index):
         self.lineEdit_moneyflow_code.setText(self.stockcodelist[index])
 
-    @staticmethod
-    def _get_data_info(sql):
+    def _get_data_info(self, sql):
         try:
-            connectSQLite.DBCur.execute(sql)
+            description = connectSQLite.DBCur.execute(sql).description
             df = connectSQLite.DBCur.fetchall()
             connectSQLite.DBCon.commit()
         except:
             df = None
-        return df
+            description = None
+        return df, description
 
     @staticmethod
     def _show_message_dialog(message='没有信息'):
