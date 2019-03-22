@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:\study\github\stockTushare\UI\showqueryinfoDialog.ui'
+# Form implementation generated from reading ui file 'showqueryinfoDialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog_show_queryinfo(object):
     def setupUi(self, Dialog_show_queryinfo):
         Dialog_show_queryinfo.setObjectName("Dialog_show_queryinfo")
-        Dialog_show_queryinfo.resize(1696, 1211)
+        Dialog_show_queryinfo.resize(1069, 658)
         self.horizontalLayout = QtWidgets.QHBoxLayout(Dialog_show_queryinfo)
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.tableView = QtWidgets.QTableView(Dialog_show_queryinfo)

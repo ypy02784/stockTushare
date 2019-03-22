@@ -75,7 +75,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
     sql_str_pct_chg = ''
     sql_str_vol = ''
     sql_str_date = ''
-    daily_query_sql: str = 'select * from daily where'  # 用来记录查询语句的
+    daily_query_sql: str = 'select name,daily.* from daily,stock_basic where'  # 用来记录查询语句的
     sub_daily_query_sql: str = ' and ts_code in ( select ts_code from  daily_basic where'  # 用来子查询的语句
 
     sql_top_code = ''  # 用来记录添加到query的code语句，方便修改删除，下面几个变量作用相同
@@ -85,12 +85,12 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
     sql_top_net_amount = ''  # 龙虎榜净买入额
     sql_top_amount_rate = ''  # 龙虎榜成交占比
     sql_top_date = ''
-    top_query_sql: str = 'select * from top_list where'
+    top_query_sql: str = 'select top_list.* from top_list where'
     sql_order_by_trade_date = ' order by trade_date desc'
 
     sql_money_code = ''
     sql_money_date = ''
-    money_query_sql: str = 'select * from moneyflow '
+    money_query_sql: str = 'select name,moneyflow.* from moneyflow,stock_basic '
 
     combobox_item = ['>', '>=', '=', '<', '<=']
 
@@ -191,7 +191,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             self.daily_query_sql = self.daily_query_sql.replace('where', '')
 
     def _pushButton_add_query_info_clicked(self):
-        self.daily_query_sql = 'select * from daily where'  # 每次都初始化
+        self.daily_query_sql = 'select name,daily.* from daily,stock_basic where'  # 每次都初始化
         self.daily_query_sql += self._lineEdit_stock_code_name_changed()
         self.daily_query_sql += self._lineEidt_pct_chg_changed()
         self.daily_query_sql += self._lineEdit_vol_changed()
@@ -200,6 +200,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             self.daily_query_sql += self._calendarWidget_clicked()
         else:
             self._checkbox_daily_state_change_clicked()
+        self.daily_query_sql += ' and daily.ts_code = stock_basic.ts_code'
         self.daily_query_sql += ' order by trade_date desc'
         self.textEdit_SQL.setPlainText(self.daily_query_sql)
 
@@ -297,7 +298,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         return tmpsql
 
     def _pushButton_add_top_query_info_clicked(self):
-        self.top_query_sql = 'select * from top_list where'  # 每次都初始化
+        self.top_query_sql = 'select top_list.* from top_list where'  # 每次都初始化
         self.top_query_sql += self._lineEdit_top_code_changed()
         self.top_query_sql += self._lineEdit_top_pct_chg_changed()
         self.top_query_sql += self._lineEdit_top_turnover_rate_changed()
@@ -328,14 +329,15 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         ts_code = self.lineEdit_moneyflow_code.text()
         if ts_code == '':
             if self.checkBox_moneyflow_date_select.isChecked():
-                sql += ' where trade_date=\'' + select_date + '\''
+                sql += ' where moneyflow.trade_date=\'' + select_date + '\''
         else:
             if self.checkBox_moneyflow_date_select.isChecked():
-                sql += ' where ts_code=\'' + ts_code + '\'' + ' and  trade_date=\'' + select_date + '\''
+                sql += ' where moneyflow.ts_code=\'' + ts_code + '\'' + ' and  moneyflow.trade_date=\'' + select_date + '\''
             else:
-                sql += ' where ts_code=\'' + ts_code + '\''
+                sql += ' where moneyflow.ts_code=\'' + ts_code + '\''
 
         sql = self.money_query_sql + sql
+        sql += ' and moneyflow.ts_code = stock_basic.ts_code order by ts_code'
         self.textEdit_moneyflow_SQL.setText(sql)
 
     def pushButton_moneyflow_query_clicked(self):

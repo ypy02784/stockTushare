@@ -1,6 +1,6 @@
 from PyQt5 import QtGui
 from SQLite.global_variable import MODEL_HEADER_DICT
-from SQLite.connectSQLite import DBCur, DBCon
+from SQLite.connectSQLite import DBCur
 
 
 # 导入该模块就要初始化该函数,否则无法正确显示model的标题
