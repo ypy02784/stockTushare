@@ -18,8 +18,7 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 -- Table structure for top_list
 -- ----------------------------
-DROP TABLE IF EXISTS "top_list";
-CREATE TABLE "top_list" (
+CREATE TABLE  IF NOT EXISTS "top_list" (
   "trade_date" TEXT(255),
   "ts_code" TEXT(255),
   "name" TEXT(255),

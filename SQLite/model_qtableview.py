@@ -1,6 +1,8 @@
 from PyQt5 import QtGui
 
 
+
+
 # 设置股票交易信息model,参数为数据库查找返回数据集
 def _setDailyModel( df):
     """

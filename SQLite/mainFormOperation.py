@@ -12,7 +12,7 @@ from SQLite import connectSQLite
 from SQLite import model_qtableview
 from SQLite.upsdownsFmOperation import upsdownsWindow
 from SQLite import getStockInfoSQLite
-import _thread
+
 
 
 class MyWindow(QMainWindow, Ui_MainWindow):

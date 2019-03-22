@@ -18,8 +18,7 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 -- Table structure for table_info
 -- ----------------------------
-DROP TABLE IF EXISTS "table_info";
-CREATE TABLE "table_info" (
+CREATE TABLE  IF NOT EXISTS "table_info" (
   "tablename" TEXT(255),
   "tableremark" TEXT(255),
   "column" TEXT(255),

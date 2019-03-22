@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" addBOMForNewFiles="with NO BOM" />
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://$PROJECT_DIR$/SQLite/sql/moneyflow.sql" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SQLite/sql/stock_basic.sql" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SQLite/sql/stock_company.sql" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/SQLite/sql/top_inst.sql" charset="UTF-8" />
+  </component>
 </project>

@@ -18,8 +18,7 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 -- Table structure for block_trade
 -- ----------------------------
-DROP TABLE IF EXISTS "block_trade";
-CREATE TABLE "block_trade" (
+CREATE TABLE IF NOT EXISTS "block_trade" (
   "ts_code" TEXT(255),
   "trade_date" TEXT(255),
   "price" REAL(255),

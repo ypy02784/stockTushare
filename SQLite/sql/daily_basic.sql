@@ -18,8 +18,7 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 -- Table structure for daily_basic
 -- ----------------------------
-DROP TABLE IF EXISTS "daily_basic";
-CREATE TABLE "daily_basic" (
+CREATE TABLE  IF NOT EXISTS "daily_basic" (
   "ts_code" TEXT(255),
   "trade_date" TEXT(255),
   "close" REAL(255),

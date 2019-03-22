@@ -18,8 +18,7 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 -- Table structure for stock_basic
 -- ----------------------------
-DROP TABLE IF EXISTS "stock_basic";
-CREATE TABLE "stock_basic" (
+CREATE TABLE  IF NOT EXISTS "stock_basic" (
   "ts_code" TEXT(255),
   "symbol" TEXT(255),
   "name" TEXT(255),

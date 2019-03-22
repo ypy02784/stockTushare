@@ -18,8 +18,7 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 -- Table structure for stock_company
 -- ----------------------------
-DROP TABLE IF EXISTS "stock_company";
-CREATE TABLE "stock_company" (
+CREATE TABLE  IF NOT EXISTS "stock_company" (
   "ts_code" TEXT(255),
   "exchange" TEXT(255),
   "chairman" TEXT(255),

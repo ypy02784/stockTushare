@@ -18,8 +18,7 @@ PRAGMA foreign_keys = false;
 -- ----------------------------
 -- Table structure for moneyflow
 -- ----------------------------
-DROP TABLE IF EXISTS "moneyflow";
-CREATE TABLE "moneyflow" (
+CREATE TABLE  IF NOT EXISTS "moneyflow" (
   "ts_code" TEXT(10),
   "trade_date" TEXT(10),
   "buy_sm_vol" INTEGER(20),
