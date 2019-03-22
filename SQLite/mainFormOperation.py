@@ -86,6 +86,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
         if model != 0:
             self.tableView.setModel(model)
+            self.tableView.resizeColumnsToContents()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '交易数据')
 
@@ -95,6 +96,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
+            self.tableView.resizeColumnsToContents()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '交易指标数据')
 
@@ -104,6 +106,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
+            self.tableView.resizeColumnsToContents()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有股票基本信息数据')
 
@@ -113,6 +116,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
+            self.tableView.resizeColumnsToContents()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有公司基本信息数据')
 
@@ -122,6 +126,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
+            self.tableView.resizeColumnsToContents()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '龙虎榜数据数据')
 
@@ -132,6 +137,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
 
         if model != 0:
             self.tableView.setModel(model)
+            self.tableView.resizeColumnsToContents()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '龙虎榜机构交易数据数据')
 
@@ -141,6 +147,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
+            self.tableView.resizeColumnsToContents()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '大宗交易数据数据')
 
@@ -150,6 +157,7 @@ class MyWindow(QMainWindow, Ui_MainWindow):
         model = model_qtableview.setModel(df, description)
         if model != 0:
             self.tableView.setModel(model)
+            self.tableView.resizeColumnsToContents()
         else:  # TODO:弹出对话框说明无数据
             self._show_message_dialog('没有' + self.selectData + '个股资金流向数据数据')
 
