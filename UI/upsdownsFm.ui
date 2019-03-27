@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_daily">
        <attribute name="title">
@@ -1290,7 +1290,7 @@
         <item>
          <widget class="QCheckBox" name="checkBox_high_light_net_positive">
           <property name="text">
-           <string>高亮显示超大单和大单买净买入为正的数据</string>
+           <string>高亮显示数据</string>
           </property>
          </widget>
         </item>

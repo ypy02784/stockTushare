@@ -132,7 +132,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         tmp = ''
         tmp2 = ''
         sql = ''
-        self.sub_daily_query_sql = ' and ts_code in ( select ts_code from  daily_basic where'
+        self.sub_daily_query_sql = ' and daily.ts_code in ( select ts_code from  daily_basic where'
         if (self.lineEdit_pe.text() == '') and (self.lineEdit_turnover_rate.text() == ''):
             self.sub_daily_query_sql = ''
         else:
@@ -327,6 +327,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         sql = ''
         select_date = self.calendarWidget_moneyflow.selectedDate().toString(Qt.ISODate).replace('-', '')  # 获取选中日期
         ts_code = self.lineEdit_moneyflow_code.text()
+        order_by = 'order by ts_code'
         if ts_code == '':
             if self.checkBox_moneyflow_date_select.isChecked():
                 sql += ' where moneyflow.trade_date=\'' + select_date + '\''
@@ -335,9 +336,10 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
                 sql += ' where moneyflow.ts_code=\'' + ts_code + '\'' + ' and  moneyflow.trade_date=\'' + select_date + '\''
             else:
                 sql += ' where moneyflow.ts_code=\'' + ts_code + '\''
+                order_by = 'order by trade_date desc'
 
         sql = self.money_query_sql + sql
-        sql += ' and moneyflow.ts_code = stock_basic.ts_code order by ts_code'
+        sql += ' and moneyflow.ts_code = stock_basic.ts_code ' + order_by
         self.textEdit_moneyflow_SQL.setText(sql)
 
     def pushButton_moneyflow_query_clicked(self):
@@ -363,14 +365,22 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
             model = self.moneyflow_model
             row = model.rowCount()
             vol = model.columnCount()
-            # moneyflow的列有20个,特大单卖出额，买入额分别17，15，大单卖出额，买入额为13，11
+            # model的第1列为名字，moneyflow的列有20个,共有21列，从第四列开始为买入手。
 
             for i in range(row):
-                if float(model.item(i, 11).text()) > float(model.item(i, 13).text()):
-                    model.item(i, 11).setBackground(QColor(255, 0, 0))
+                for j in range(3, 18, 4):
+                    if float(model.item(i, j).text()) > float(model.item(i, j+2).text()):
+                        for k in range(j, j+4):
+                            model.item(i, k).setBackground(QColor(255, 0, 0))
+                    else:
+                        for k in range(j, j + 4):
+                            model.item(i, k).setBackground(QColor(0, 255, 0))
+                if float(model.item(i, 20).text()) > 0:
+                    model.item(i, 20).setBackground(QColor(255, 0, 0))
+                else:
+                    model.item(i, 20).setBackground(QColor(0, 255, 0))
 
-                if float(model.item(i, 15).text()) > float(model.item(i, 17).text()):
-                    model.item(i, 15).setBackground(QColor(255, 0, 0))
+
 
     """
     公共函数
@@ -414,19 +424,19 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
 
     # comboBox选择后自动填写ts_code到lineedit中
     def _on_combobox_code_activate(self, index):
-        if index <= self.stockcodelist.count():
+        if index <= len(self.stockcodelist):
             self.lineEdit_daily_code.setText(self.stockcodelist[index])
         else:
             self._show_message_dialog('输入股票的名称错误！！！')
 
     def _on_combobox_top_code_activate(self, index):
-        if index <= self.stockcodelist.count():
+        if index <= len(self.stockcodelist):
             self.lineEdit_top_code.setText(self.stockcodelist[index])
         else:
             self._show_message_dialog('输入股票的名称错误！！！')
 
     def _on_combobox_moneyflow_code_activate(self, index):
-        if index <= self.stockcodelist.count():
+        if index <= len(self.stockcodelist):
             self.lineEdit_moneyflow_code.setText(self.stockcodelist[index])
         else:
             self._show_message_dialog('输入股票的名称错误！！！')
@@ -470,9 +480,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
     #     self._show_message_dialog('测试成功')
 
 
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     myWin = upsdownsWindow()
-#     myWin.showMaximized()
-#
-#     app.exec_()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    myWin = upsdownsWindow()
+    myWin.showMaximized()
+
+    app.exec_()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'upsdownsFm.ui'
+# Form implementation generated from reading ui file 'D:\study\github\stockTushare\UI\upsdownsFm.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -638,7 +638,7 @@ class Ui_UpsAndDownsWindow(object):
         UpsAndDownsWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(UpsAndDownsWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         self.comboBox_pct_chg.setCurrentIndex(-1)
         self.comboBox_vol.setCurrentIndex(-1)
         self.comboBox_daily_name.setCurrentIndex(-1)
@@ -709,6 +709,6 @@ class Ui_UpsAndDownsWindow(object):
         self.pushButton_add_moneyflow_query.setText(_translate("UpsAndDownsWindow", "创建查询"))
         self.groupBox_6.setTitle(_translate("UpsAndDownsWindow", "SQL语句"))
         self.pushButton_moneyflow_query.setText(_translate("UpsAndDownsWindow", "开始查询"))
-        self.checkBox_high_light_net_positive.setText(_translate("UpsAndDownsWindow", "高亮显示超大单和大单买净买入为正的数据"))
+        self.checkBox_high_light_net_positive.setText(_translate("UpsAndDownsWindow", "高亮显示数据"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_moneyflow), _translate("UpsAndDownsWindow", "资金流向"))
 
