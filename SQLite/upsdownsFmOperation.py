@@ -414,17 +414,26 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
 
     # comboBox选择后自动填写ts_code到lineedit中
     def _on_combobox_code_activate(self, index):
-        self.lineEdit_daily_code.setText(self.stockcodelist[index])
+        if index <= self.stockcodelist.count():
+            self.lineEdit_daily_code.setText(self.stockcodelist[index])
+        else:
+            self._show_message_dialog('输入股票的名称错误！！！')
 
     def _on_combobox_top_code_activate(self, index):
-        self.lineEdit_top_code.setText(self.stockcodelist[index])
+        if index <= self.stockcodelist.count():
+            self.lineEdit_top_code.setText(self.stockcodelist[index])
+        else:
+            self._show_message_dialog('输入股票的名称错误！！！')
 
     def _on_combobox_moneyflow_code_activate(self, index):
-        self.lineEdit_moneyflow_code.setText(self.stockcodelist[index])
+        if index <= self.stockcodelist.count():
+            self.lineEdit_moneyflow_code.setText(self.stockcodelist[index])
+        else:
+            self._show_message_dialog('输入股票的名称错误！！！')
 
     def _get_data_info(self, sql):
         try:
-            description = connectSQLite.DBCur.execute(sql).description
+            description = connectSQLite.DBCur.execute(sql).description  #查询结果的列名
             df = connectSQLite.DBCur.fetchall()
             connectSQLite.DBCon.commit()
         except:
@@ -461,9 +470,9 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
     #     self._show_message_dialog('测试成功')
 
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    myWin = upsdownsWindow()
-    myWin.showMaximized()
-
-    app.exec_()
+# if __name__ == '__main__':
+#     app = QApplication(sys.argv)
+#     myWin = upsdownsWindow()
+#     myWin.showMaximized()
+#
+#     app.exec_()
