@@ -208,7 +208,7 @@
      <x>0</x>
      <y>0</y>
      <width>1939</width>
-     <height>45</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_query">
@@ -227,10 +227,10 @@
     <addaction name="action_update_top_inst_info"/>
     <addaction name="action_update_block_trade_info"/>
     <addaction name="action_update_moneyflow_info"/>
+    <addaction name="action_update_all_info"/>
+    <addaction name="separator"/>
     <addaction name="action_update_stock_basic_info"/>
     <addaction name="action_update_company_info"/>
-    <addaction name="separator"/>
-    <addaction name="action_update_all_info"/>
    </widget>
    <addaction name="menu_query"/>
    <addaction name="menu"/>

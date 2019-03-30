@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:\study\github\stockTushare\UI\upsdownsFm.ui'
+# Form implementation generated from reading ui file 'upsdownsFm.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #

@@ -307,9 +307,7 @@ def _get_maxdate_from_table(tablename):
 
 # 更新所有股票数据
 def update_stock_info():
-    tmp = update_stockbasic_to_db() + '\n'  # 股票基本信息
-    tmp += update_company_info_to_db() + '\n'  # 公司信息
-    tmp += get_all_stock_daily_info()  # 日交易信息
+    tmp = get_all_stock_daily_info()  # 日交易信息
     tmp += get_all_stock_daily_basic_info()  # 日交易指标
     tmp += get_all_top_list_info()
     tmp += get_all_top_inst_info()
