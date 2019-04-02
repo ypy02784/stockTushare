@@ -53,7 +53,8 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         # 资金流自动更新查询语句
         self.pushButton_add_moneyflow_query.clicked.connect(self._pushButton_add_moneyflow_query_clicked)
         self.lineEdit_moneyflow_code.textChanged.connect(self._pushButton_add_moneyflow_query_clicked)
-        self.checkBox_moneyflow_date_select.stateChanged.connect(self._pushButton_add_moneyflow_query_clicked)
+        self.radioButton_moneyflow_date_select.toggled.connect(self._pushButton_add_moneyflow_query_clicked)
+        self.radioButton_moneyflow_date_interval.toggled.connect(self._pushButton_add_moneyflow_query_clicked)
         self.calendarWidget_moneyflow.selectionChanged.connect(self._pushButton_add_moneyflow_query_clicked)
         self.pushButton_moneyflow_query.clicked.connect(self.pushButton_moneyflow_query_clicked)
         self.checkBox_high_light_net_positive.stateChanged.connect(self._checkBox_high_light_net_positive_clicked)
@@ -201,7 +202,7 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         else:
             self._checkbox_daily_state_change_clicked()
         self.daily_query_sql += ' and daily.ts_code = stock_basic.ts_code'
-        self.daily_query_sql += ' order by trade_date desc'
+        self.daily_query_sql += ' order by trade_date desc limit 30'
         self.textEdit_SQL.setPlainText(self.daily_query_sql)
 
     def _pushButton_query_clicked(self):
@@ -327,16 +328,19 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
         sql = ''
         select_date = self.calendarWidget_moneyflow.selectedDate().toString(Qt.ISODate).replace('-', '')  # 获取选中日期
         ts_code = self.lineEdit_moneyflow_code.text()
-        order_by = 'order by ts_code'
+        order_by = 'order by ts_code '
         if ts_code == '':
-            if self.checkBox_moneyflow_date_select.isChecked():
+            if self.radioButton_moneyflow_date_select.isChecked():
                 sql += ' where moneyflow.trade_date=\'' + select_date + '\''
+            else:
+                sql += ' where moneyflow.ts_code=\'' + ts_code + '\''
+                order_by = 'order by trade_date desc limit '+self.spinBox_moneyflow.text()
         else:
-            if self.checkBox_moneyflow_date_select.isChecked():
+            if self.radioButton_moneyflow_date_select.isChecked():
                 sql += ' where moneyflow.ts_code=\'' + ts_code + '\'' + ' and  moneyflow.trade_date=\'' + select_date + '\''
             else:
                 sql += ' where moneyflow.ts_code=\'' + ts_code + '\''
-                order_by = 'order by trade_date desc'
+                order_by = 'order by trade_date desc limit '+self.spinBox_moneyflow.text()
 
         sql = self.money_query_sql + sql
         sql += ' and moneyflow.ts_code = stock_basic.ts_code ' + order_by
@@ -424,19 +428,19 @@ class upsdownsWindow(QMainWindow, Ui_UpsAndDownsWindow):
 
     # comboBox选择后自动填写ts_code到lineedit中
     def _on_combobox_code_activate(self, index):
-        if index <= len(self.stockcodelist):
+        if index < len(self.stockcodelist):
             self.lineEdit_daily_code.setText(self.stockcodelist[index])
         else:
             self._show_message_dialog('输入股票的名称错误！！！')
 
     def _on_combobox_top_code_activate(self, index):
-        if index <= len(self.stockcodelist):
+        if index <len(self.stockcodelist):
             self.lineEdit_top_code.setText(self.stockcodelist[index])
         else:
             self._show_message_dialog('输入股票的名称错误！！！')
 
     def _on_combobox_moneyflow_code_activate(self, index):
-        if index <= len(self.stockcodelist):
+        if index < len(self.stockcodelist):
             self.lineEdit_moneyflow_code.setText(self.stockcodelist[index])
         else:
             self._show_message_dialog('输入股票的名称错误！！！')

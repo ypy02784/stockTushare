@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'upsdownsFm.ui'
+# Form implementation generated from reading ui file 'D:\study\github\stockTushare\UI\upsdownsFm.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_UpsAndDownsWindow(object):
     def setupUi(self, UpsAndDownsWindow):
         UpsAndDownsWindow.setObjectName("UpsAndDownsWindow")
-        UpsAndDownsWindow.resize(597, 713)
+        UpsAndDownsWindow.resize(1182, 1438)
         self.centralwidget = QtWidgets.QWidget(UpsAndDownsWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -591,10 +591,25 @@ class Ui_UpsAndDownsWindow(object):
         self.calendarWidget_moneyflow.setDateEditEnabled(True)
         self.calendarWidget_moneyflow.setObjectName("calendarWidget_moneyflow")
         self.verticalLayout_7.addWidget(self.calendarWidget_moneyflow)
-        self.checkBox_moneyflow_date_select = QtWidgets.QCheckBox(self.frame_7)
-        self.checkBox_moneyflow_date_select.setChecked(True)
-        self.checkBox_moneyflow_date_select.setObjectName("checkBox_moneyflow_date_select")
-        self.verticalLayout_7.addWidget(self.checkBox_moneyflow_date_select)
+        self.frame_8 = QtWidgets.QFrame(self.frame_7)
+        self.frame_8.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_8.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_8.setObjectName("frame_8")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.frame_8)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.radioButton_moneyflow_date_select = QtWidgets.QRadioButton(self.frame_8)
+        self.radioButton_moneyflow_date_select.setObjectName("radioButton_moneyflow_date_select")
+        self.horizontalLayout_8.addWidget(self.radioButton_moneyflow_date_select)
+        self.radioButton_moneyflow_date_interval = QtWidgets.QRadioButton(self.frame_8)
+        self.radioButton_moneyflow_date_interval.setChecked(True)
+        self.radioButton_moneyflow_date_interval.setObjectName("radioButton_moneyflow_date_interval")
+        self.horizontalLayout_8.addWidget(self.radioButton_moneyflow_date_interval)
+        self.spinBox_moneyflow = QtWidgets.QSpinBox(self.frame_8)
+        self.spinBox_moneyflow.setMaximum(1000)
+        self.spinBox_moneyflow.setProperty("value", 30)
+        self.spinBox_moneyflow.setObjectName("spinBox_moneyflow")
+        self.horizontalLayout_8.addWidget(self.spinBox_moneyflow)
+        self.verticalLayout_7.addWidget(self.frame_8)
         self.pushButton_add_moneyflow_query = QtWidgets.QPushButton(self.frame_7)
         self.pushButton_add_moneyflow_query.setEnabled(True)
         self.pushButton_add_moneyflow_query.setObjectName("pushButton_add_moneyflow_query")
@@ -705,7 +720,8 @@ class Ui_UpsAndDownsWindow(object):
         self.label_12.setText(_translate("UpsAndDownsWindow", "股票名称或代码"))
         self.comboBox_moneyflow_name.setWhatsThis(_translate("UpsAndDownsWindow", "<html><head/><body><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p><br/></p></body></html>"))
         self.lineEdit_moneyflow_code.setToolTip(_translate("UpsAndDownsWindow", "<html><head/><body><p>请输入完整的股票代码或者股票名称</p></body></html>"))
-        self.checkBox_moneyflow_date_select.setText(_translate("UpsAndDownsWindow", "添加时间查询"))
+        self.radioButton_moneyflow_date_select.setText(_translate("UpsAndDownsWindow", "按选定日期查询"))
+        self.radioButton_moneyflow_date_interval.setText(_translate("UpsAndDownsWindow", "按交易日间隔查询"))
         self.pushButton_add_moneyflow_query.setText(_translate("UpsAndDownsWindow", "创建查询"))
         self.groupBox_6.setTitle(_translate("UpsAndDownsWindow", "SQL语句"))
         self.pushButton_moneyflow_query.setText(_translate("UpsAndDownsWindow", "开始查询"))
